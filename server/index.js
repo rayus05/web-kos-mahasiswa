@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose'); // BARU: Panggil Mongoose
 require('dotenv').config(); // BARU: Panggil config .env
+const Kos = require('./models/Kos'); // BARU: Panggil model Kos
 
 const app = express();
 const port = process.env.PORT || 5000; // Kita pakai port 5000 (karena React biasanya port 3000)
@@ -24,6 +25,27 @@ mongoose.connect(uri)
 // --- Routes (Jalur Akses) ---
 app.get('/', (req, res) => {
   res.send('Halo Sahabat! API Server Kos Mahasiswa sudah jalan! 🚀');
+});
+
+// Route untuk mendapatkan semua data kos
+app.get('/api/kos', async (req, res) => {
+  try {
+    const semuaKos = await Kos.find();
+    res.json(semuaKos);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Route untuk menambahkan data kos baru
+app.post('/api/kos', async (req, res) => {
+  try {
+    const kosBaru = new Kos(req.body);
+    const kosTersimpan = await kosBaru.save();
+    res.status(201).json(kosTersimpan);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 });
 
 // --- Jalankan Server ---
