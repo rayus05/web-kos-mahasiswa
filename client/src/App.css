@@ -1,0 +1,50 @@
+/* Reset dasar */
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif;}
+
+body { background-color: #f0f2f5; padding: 20px; }
+
+.container { max-width: 1200px; margin: 0 auto; }
+
+header { text-align: center; margin-bottom: 40px; }
+header h1 { color: #2c3e50; margin-bottom: 10px;}
+
+/* Grid System agar kartu berjajar rapi */
+.kos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+/* Tampilan Kartu Kos */
+.kos-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.kos-card:hover { transform: translateY(-5px); }
+
+.kos-card img { width: 100%; height: 200px; object-fit: cover; background: #ddd;}
+
+.kos-info { padding: 15px; }
+
+.tag {
+  font-size: 12px; font-weight: bold; padding: 5px 10px; border-radius: 20px;
+  display: inline-block; margin-bottom: 10px; color: white;
+}
+.tag.putra { background-color: #3498db; }
+.tag.putri { background-color: #e91e63; }
+.tag.campur { background-color: #9b59b6; }
+
+h3 { font-size: 18px; margin-bottom: 5px; color: #333; }
+
+.harga { font-weight: bold; color: #27ae60; font-size: 16px; margin-bottom: 5px; }
+.lokasi { font-size: 14px; color: #7f8c8d; margin-bottom: 15px;}
+
+.btn-detail {
+  width: 100%; padding: 10px 0; background-color: #2c3e50; color: white;
+  border: none; border-radius: 6px; cursor: pointer; font-weight: bold;
+}
+.btn-detail:hover { background-color: #1a252f; }
