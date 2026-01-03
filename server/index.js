@@ -100,8 +100,6 @@ app.put('/api/kos/:id', async (req, res) => {
     const kosLama = await Kos.findById(id);
     if (!kosLama) return res.status(404).json({ message: "Kos tidak ditemukan" });
 
-    if (!kosLama) return res.status(404).json({ message: "Not found" });
-
     // Logika Sederhana: Jika admin upload foto baru, HAPUS SEMUA foto lama fisik
     // Lalu gantikan datanya dengan array foto yang baru.
     if (req.body.foto && Array.isArray(req.body.foto) && req.body.foto.length > 0) {
@@ -140,10 +138,10 @@ app.delete('/api/kos/:id', async (req, res) => {
 app.post('/api/upload', upload.array('images', 10), (req, res) => {
   try {
     // Kembalikan Link Full ke Frontend
-    const fileUrls = req.file.files.map(file => {
+    const fileUrls = req.files.map(file => {
       return `http://localhost:${port}/uploads/${file.filename}`;
     });
-    res.json({ url: fileUrls });
+    res.json({ urls: fileUrls });
   } catch (error) {
     res.status(500).json({ message: "Gagal upload gambar" });
   }
