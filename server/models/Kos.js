@@ -29,13 +29,15 @@ const kosSchema = new mongoose.Schema({
     deskripsi: {
         type: String,
     },
-    foto: {
-        type: String,
-        default: "https://via.placeholder.com/300",
-    },
+    foto: [
+        {type: String}
+    ],
     kontak: {
         type: String,
         required: true,
+    },
+    createdAt: { 
+        type: Date, default: Date.now 
     }
 }, {
     timestamps: true,
