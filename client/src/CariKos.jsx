@@ -1,18 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import axios from 'axios';
-import Footer from './Footer'; // Jangan lupa pasang footer biar rapi
+import Footer from './Footer';
 import './App.css';
 
 function CariKos() {
   const [kosList, setKosList] = useState([]);
   const location = useLocation();
-
-  // Ambil parameter dari URL
   const queryParams = new URLSearchParams(location.search);
   const initialKeyword = queryParams.get('keyword') || '';
   const initialTipe = queryParams.get('tipe') || 'Semua';
-
   const [keyword, setKeyword] = useState(initialKeyword);
   const [tipe, setTipe] = useState(initialTipe);
 
@@ -44,12 +41,9 @@ function CariKos() {
     <div className="search-page-wrapper">
       
       {/* --- BAGIAN ATAS (HEADER HIJAU) --- */}
-      {/* Berfungsi sebagai background navbar & tempat search bar */}
       <div className="search-page-header">
         <div className="container">
           <h2 className="search-title">Temukan Kos Impianmu 🔍</h2>
-          
-          {/* Search Bar yang lebih rapi */}
           <div className="search-bar-wide">
             <input 
               type="text" 
@@ -84,8 +78,6 @@ function CariKos() {
       {/* --- BAGIAN BAWAH (LISTING ABU-ABU) --- */}
       <div className="search-page-content">
         <div className="container">
-          
-          {/* Grid Kos */}
           <div className="search-grid">
             {filteredKos.length > 0 ? (
               filteredKos.map((kos) => (

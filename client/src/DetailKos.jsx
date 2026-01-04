@@ -1,7 +1,8 @@
-import { use, useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Footer from './Footer'; // Jangan lupa Footer
+import Footer from './Footer';
+import { AuthContext } from './AuthContext';
 import './App.css';
 
 function DetailKos() {
@@ -9,9 +10,10 @@ function DetailKos() {
   const [kos, setKos] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Scroll ke paling atas saat halaman dibuka
     window.scrollTo(0, 0);
 
     axios.get(`http://localhost:5000/api/kos/${id}`)
@@ -46,21 +48,32 @@ function DetailKos() {
 
   const nextImage = (e) => {
     if(e) e.stopPropagation();
-    setCurrentImageIndex((prev) => (prev === photos.length - 1 ? 0 : prev + 1)); // Loop ke awal
+    setCurrentImageIndex((prev) => (prev === photos.length - 1 ? 0 : prev + 1));
   };
 
   const prevImage = (e) => {
     if(e) e.stopPropagation();
-    setCurrentImageIndex((prev) => (prev === 0 ? photos.length - 1 : prev - 1)); // Loop ke akhir
+    setCurrentImageIndex((prev) => (prev === 0 ? photos.length - 1 : prev - 1));
+  };
+
+  const handleChatWA = (e) => {
+    if (!user) {
+      e.preventDefault();
+      const mauLogin = window.confirm("🔒 Fitur Terkunci!\n\nAnda harus Login terlebih dahulu untuk menghubungi pemilik kos demi keamanan. Mau login sekarang?");
+      if (mauLogin) {
+        navigate('/login');
+      }
+    } else {
+      window.open(linkWA, '_blank');
+    }
   };
 
   return (
     <div className="main-wrapper" style={{background: '#f5f7fa'}}>
       <div className="detail-header-bg"></div>
       <div className="container detail-container">
-        {/* --- KOLOM KIRI: KONTEN UTAMA --- */}
         <div className="detail-main">
-          {/* === GALERI FOTO BARU (GRID 1+3) === */}
+          {/* Gallery */}
           <div className="gallery-wrapper">
             {photos.length > 0 ? (
               <div className="gallery-grid">
@@ -83,19 +96,18 @@ function DetailKos() {
               <div className="gallery-empty"><img src="https://via.placeholder.com/800x400" className="img-cover" /></div>
             )}
           </div>
-          {/* === AKHIR GALERI === */}
 
-          {/* 2. Judul & Info Dasar */}
+          {/* Judul & Info Dasar */}
           <div className="detail-section">
             <h1 className="detail-title">{kos.nama}</h1>
             <p className="detail-address">📍 {kos.alamat}</p>
             <div className="detail-meta">
               <span>📏 Jarak ke kampus: <strong>{kos.jarak}</strong></span>
-              <span>📅 Post: {kos.updatedAt ? new Date(kos.updatedAt).toLocaleDateString('id-ID') : 'Baru saja'}</span>
+              <span>📅 Post: {kos.createdAt ? new Date(kos.createdAt).toLocaleDateString('id-ID') : 'Baru saja'}</span>
             </div>
           </div>
 
-          {/* 3. Fasilitas */}
+          {/* Fasilitas */}
           <div className="detail-section">
             <h3>Fasilitas Kos</h3>
             <div className="facilities-grid">
@@ -111,7 +123,7 @@ function DetailKos() {
             </div>
           </div>
 
-          {/* 4. Deskripsi */}
+          {/* Deskripsi */}
           <div className="detail-section">
             <h3>Deskripsi</h3>
             <p className="detail-desc">
@@ -119,7 +131,7 @@ function DetailKos() {
             </p>
           </div>
 
-          {/* 5. Lokasi (Google Maps Embed) */}
+          {/* Lokasi (Google Maps Embed) */}
           <div className="detail-section">
             <h3>Lokasi Peta</h3>
             <div className="map-frame">
@@ -137,7 +149,7 @@ function DetailKos() {
 
         </div>
 
-        {/* --- KOLOM KANAN: STICKY BOOKING CARD --- */}
+        {/* --- STICKY BOOKING CARD --- */}
         <div className="detail-sidebar">
           <div className="booking-card">
             <p className="booking-label">Harga Sewa Mulai</p>
@@ -153,29 +165,37 @@ function DetailKos() {
               </div>
             </div>
 
-            <a href={linkWA} target="_blank" rel="noreferrer" className="btn-chat-wa">
-              <span className="wa-icon">💬</span> Chat Pemilik via WA
+            <a 
+              href={linkWA} 
+              onClick={handleChatWA} 
+              className={`btn-chat-wa ${!user ? 'locked' : ''}`}
+            >
+              {user ? (
+                <>
+                  <span className="wa-icon">💬</span> Chat Pemilik via WA
+                </>
+              ) : (
+                <>
+                  <span className="wa-icon">🔒</span> Masuk untuk Chat
+                </>
+              )}
             </a>
 
             <p className="safety-note">
-              🛡️ <strong>Tips:</strong> Jangan transfer uang sebelum melihat lokasi kos secara langsung.
+              🛡️ <strong>Tips:</strong> {user ? "Jangan transfer uang sebelum cek lokasi." : "Login diperlukan untuk menghindari spam."}
             </p>
           </div>
         </div>
-
       </div>
 
       <Footer />
 
-      {/* --- MODAL GALERI FOTO --- */}
-      {/* === MODAL LIGHTBOX BARU (SLIDESHOW) === */}
+      {/* --- MODAL GALERI FOTO SLIDESHOW --- */}
       {showModal && (
         <div className="lightbox-overlay" onClick={() => setShowModal(false)}>
           
-          {/* Tombol Close */}
           <button className="lightbox-btn close-btn" onClick={() => setShowModal(false)}>✖</button>
 
-          {/* Tombol Kiri */}
           <button className="lightbox-btn prev-btn" onClick={prevImage}>❮</button>
 
           {/* Container Gambar */}
@@ -190,12 +210,11 @@ function DetailKos() {
             </div>
           </div>
 
-          {/* Tombol Kanan */}
           <button className="lightbox-btn next-btn" onClick={nextImage}>❯</button>
         </div>
       )}
     </div>
   );
-}
+};
 
 export default DetailKos;

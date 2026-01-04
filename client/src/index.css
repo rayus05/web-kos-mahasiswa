@@ -1,4 +1,3 @@
-/* src/index.css yang baru */
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
@@ -11,5 +10,5 @@ body {
 }
 
 #root {
-  width: 100%; /* Pastikan root app mengambil lebar penuh */
+  width: 100%;
 }

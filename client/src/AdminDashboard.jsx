@@ -5,8 +5,6 @@ function AdminDashboard() {
   const [kosList, setKosList] = useState([]);
   const [editId, setEditId] = useState(null);
   const [imageFiles, setImageFiles] = useState([]);
-
-  // State Formulir
   const [formData, setFormData] = useState({
     nama: '', tipe: 'Campur', harga: '', alamat: '', 
     jarak: '', fasilitas: '', deskripsi: '', foto: [], kontak: ''
@@ -156,7 +154,7 @@ function AdminDashboard() {
               value={formData.deskripsi}
               onChange={handleChange}
               placeholder="Jelaskan detail kos (misal: Lingkungan aman, dekat masjid, akses 24 jam...)"
-              rows="5" /* Biar kotaknya agak tinggi */
+              rows="5"
             ></textarea>
           </div>
           
@@ -173,7 +171,7 @@ function AdminDashboard() {
               type="file" 
               accept="image/*"
               multiple // <--- PENTING!
-              onChange={(e) => setImageFiles(e.target.files)} // Ambil semua files
+              onChange={(e) => setImageFiles(e.target.files)}
               style={{marginBottom: '10px'}}
             />
 

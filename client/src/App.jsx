@@ -1,24 +1,39 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import Login from './Login';
+import Register from './Register';
+import Logout from './Logout';
 import Navbar from './Navbar';
-import Home from './Home';        // Panggil halaman Home
-import CariKos from './CariKos';  // Panggil halaman CariKos
-import DetailKos from './DetailKos'; // Panggil halaman Detail
+import Home from './Home';
+import CariKos from './CariKos';
+import DetailKos from './DetailKos';
 import AdminDashboard from './AdminDashboard';
 import './App.css';
 
-function App() {
+function AppContent() {
+  const location = useLocation();
+  const hideNavbarPaths = ['/login', '/register', '/admin', '/logout'];
+  const shouldShowNavbar = !hideNavbarPaths.includes(location.pathname);
+
   return (
-    <Router>
-      <Navbar />
+    <>
+      {shouldShowNavbar && <Navbar />}
       <Routes>
-        {/* Kalau user buka web utama, tampilkan Home */}
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/logout" element={<Logout />} />
         <Route path="/" element={<Home />} />
-        
-        {/* Kalau user buka /kos/123, tampilkan Detail */}
         <Route path="/kos/:id" element={<DetailKos />} />
         <Route path="/cari" element={<CariKos />} />
         <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }

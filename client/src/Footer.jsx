@@ -1,4 +1,4 @@
-import './App.css'; // Biar css-nya nyambung
+import './App.css';
 
 const year = new Date().getFullYear();
 
@@ -35,7 +35,6 @@ function Footer() {
           <p>📧 support@zonakampus.com</p>
           
           <div className="social-icons">
-            {/* Pura-pura tombol sosmed */}
             <span>📷</span> <span>🐦</span> <span>📘</span>
           </div>
         </div>

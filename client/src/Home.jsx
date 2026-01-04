@@ -32,7 +32,7 @@ function Home() {
   const scroll = (arah) => {
     if (sliderRef.current) {
       const { current } = sliderRef;
-      const scrollAmount = 300; // Jarak geser (sesuaikan dengan lebar kartu)
+      const scrollAmount = 300;
       
       if (arah === 'left') {
         current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
@@ -42,7 +42,7 @@ function Home() {
     }
   };
 
-  const rekomendasiKos = kosList.slice(0, 10); // Ambil 10 kos pertama sebagai rekomendasi
+  const rekomendasiKos = kosList.slice(0, 10);
 
   return (
     <div className="main-wrapper">
@@ -81,7 +81,7 @@ function Home() {
           <button onClick={() => scroll('left')} className="nav-btn left-btn">❮</button>
           <div className="kos-slider" ref={sliderRef}>
             {rekomendasiKos.map((kos) => (
-              <div key={kos._id} className="kos-card slider-item"> {/* Tambah class slider-item */}
+              <div key={kos._id} className="kos-card slider-item">
                 <div className="card-image-wrapper">
                   <span className={`tag-floating ${kos.tipe}`}>{kos.tipe}</span>
                   <img src={(kos.foto && kos.foto[0]) ? kos.foto[0] : "https://via.placeholder.com/300"} className="kos-image" />
@@ -131,7 +131,6 @@ function Home() {
           <button className="btn-cta">Daftar Jadi Mitra 🚀</button>
         </div>
         <div className="cta-image">
-            {/* Ilustrasi Rumah/Kunci (Emoji besar dulu biar gampang) */}
             🏡
         </div>
       </div>
