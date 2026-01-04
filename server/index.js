@@ -1,16 +1,19 @@
-// server/index.js
 const express = require('express');
 const cors = require('cors');
-const mongoose = require('mongoose'); // BARU: Panggil Mongoose
-const multer = require('multer'); // BARU: Panggil Multer untuk upload file
+const mongoose = require('mongoose');
+const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-require('dotenv').config(); // BARU: Panggil config .env
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const rateLimit = require('express-rate-limit');
+const User = require('./models/User');
+require('dotenv').config();
 
-const Kos = require('./models/Kos'); // BARU: Panggil model Kos
+const Kos = require('./models/Kos');
 
 const app = express();
-const port = process.env.PORT || 5000; // Kita pakai port 5000 (karena React biasanya port 3000)
+const port = process.env.PORT || 5000;
 
 // --- Middleware (Satpam/Perantara) ---
 app.use(cors());              // Bolehkan akses dari luar
@@ -25,6 +28,13 @@ mongoose.connect(uri)
   .catch((err) => {
     console.error("❌ Gagal connect ke Database:", err);
   });
+
+// --- Setup Rate Limiter ---
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 menit
+  max: 5, // Batasi tiap IP maksimal 100 request per windowMs
+  message: "Terlalu banyak permintaan daftar/login dari IP ini, silakan coba lagi nanti."
+});
 
 // --- Setup Multer untuk Upload Gambar ---
 const storage = multer.diskStorage({
@@ -56,6 +66,60 @@ const hapusFotoLama = (fotoArray) => {
     }
   });
 };
+
+// --- ROUTE API ---
+
+  // Route Authentikasi (Register & Login) dengan Rate Limiter
+  // 1. Register
+app.post('/api/auth/register', authLimiter, async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+
+    // Cek apakah user/email sudah terdaftar
+    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+    if (existingUser) return res.status(400).json({ message: "Username atau email sudah terdaftar." });
+
+    // Hash password sebelum disimpan
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Simpan user baru
+    const newUser = new User({ username, email, password: hashedPassword });
+    await newUser.save();
+
+    res.status(201).json({ message: "User berhasil didaftarkan." });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error: error.message });
+  }
+});
+
+// 2. Login
+app.post('/api/auth/login', authLimiter, async (req, res) => {
+  try {
+    const {email, password } = req.body;
+
+    // Cek apakah user ada
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ message: "Email atau password salah." });
+
+    // Cek password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(400).json({ message: "Email atau password salah." });
+
+    // Buat token JWT
+    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1d' });
+
+    // Kirim token ke client
+    res.json({ 
+      token,
+      user: { id: user._id, username: user.username, email: user.email, role: user.role }, 
+      message: "Login berhasil." 
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error: error.message });
+  }
+});
 
   // Route untuk mendapatkan semua data kos
 app.get('/api/kos', async (req, res) => {
