@@ -1,50 +1,1276 @@
-/* Reset dasar */
-* { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif;}
+/* --- GLOBAL RESET & FONT --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 
-body { background-color: #f0f2f5; padding: 20px; }
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
 
-.container { max-width: 1200px; margin: 0 auto; }
-
-header { text-align: center; margin-bottom: 40px; }
-header h1 { color: #2c3e50; margin-bottom: 10px;}
-
-/* Grid System agar kartu berjajar rapi */
-.kos-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+body {
+  background-color: #f5f7fa; /* Abu sangat muda, bersih */
+  color: #333;
 }
 
-/* Tampilan Kartu Kos */
-.kos-card {
+.main-wrapper { 
+  min-height: 100vh;
+}
+
+/* --- HERO SECTION (Header Mewah) --- */
+.hero-section {
+  background: linear-gradient(135deg, #0f766e 0%, #115e59 100%); /* Warna Teal Modern */
+  padding: 80px 20px 80px; /* Padding bawah besar untuk efek search box nindih */
+  text-align: center;
+  color: white;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  margin-bottom: 60px;
+}
+
+.brand-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: -1px;
+}
+
+.brand-tagline {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin-bottom: 30px;
+}
+
+/* --- SEARCH BOX (Mengambang) --- */
+.search-box {
   background: white;
+  padding: 10px;
+  border-radius: 50px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  width: 100%;
+  max-width: 800px;
+  flex-wrap: wrap;
+}
+
+.search-action {
+  display: flex;
+  gap: 10px;
+}
+
+.search-box select {
+  border: none;
+  background-color: #f3f4f6;
+  padding: 12px 30px;
+  border-radius: 30px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  outline: none;
+  margin-right: 5px;
+}
+
+.search-box input {
+  border: none;
+  padding: 12px 20px;
+  border-radius: 30px;
+  flex: 1;
+  font-size: 16px;
+  outline: none;
+}
+
+.btn-search-hero {
+  background-color: #f97316;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 30px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.search-box select:hover { background-color: #e5e7eb; }
+.btn-search-hero:hover { background-color: #ea580c; transform: scale(1.05); }
+
+/* =========================================
+   CSS HALAMAN PENCARIAN (New Design)
+   ========================================= */
+
+.search-page-wrapper {
+  background-color: #f5f7fa; /* Warna dasar abu muda */
+  min-height: 100vh;
+}
+
+/* --- 1. HEADER ATAS (HIJAU TEAL) --- */
+.search-page-header {
+  background: linear-gradient(135deg, #0f766e 0%, #115e59 100%); /* Sama dengan Hero */
+  padding-top: 100px; /* Ruang untuk Navbar Fixed */
+  padding-bottom: 20px;
+  color: white;
+  text-align: center;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 20px rgba(15, 118, 110, 0.2);
+}
+
+.search-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+.search-result-count {
+  margin-top: 15px;
+  opacity: 0.8;
+  font-size: 14px;
+}
+
+/* --- 2. SEARCH BAR WIDE (PUTIH BERSIH) --- */
+.search-bar-wide {
+  background: white;
+  padding: 10px;
+  border-radius: 50px;
+  display: inline-flex;
+  gap: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+  width: 100%;
+  max-width: 800px; /* Lebih lebar biar lega */
+  align-items: center;
+}
+
+.input-wide {
+  flex: 1; /* Ambil sisa ruang */
+  border: none;
+  padding: 15px 25px;
+  font-size: 16px;
+  outline: none;
+  border-radius: 40px;
+  color: #333;
+}
+
+.select-wide {
+  border: none;
+  background-color: #f3f4f6;
+  padding: 12px 30px;
+  border-radius: 40px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  outline: none;
+  min-width: 150px;
+  margin-right: 5px; /* Jarak dikit dari kanan */
+}
+.select-wide:hover {
+  background-color: #e5e7eb;
+}
+
+/* --- 3. GRID CONTENT (DI BAWAH) --- */
+.search-page-content {
+  padding-bottom: 60px;
+  /* Backgroundnya mengikuti .search-page-wrapper (abu muda) */
+}
+
+/* Grid Layout */
+.search-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Responsif */
+  gap: 30px;
+}
+
+/* Override Kos Card di halaman Search (Opsional, memastikan konsistensi) */
+.search-grid .kos-card {
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05); /* Shadow lebih halus */
+  border: 1px solid white; /* Border putih biar kontras sama bg abu */
+}
+.search-grid .kos-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+
+/* --- EMPTY STATE (Jika Kosong) --- */
+.empty-state-search {
+  grid-column: 1 / -1; /* Ambil selebar layar */
+  text-align: center;
+  padding: 80px 20px;
+  background: white;
+  border-radius: 16px;
+  border: 1px dashed #ccc;
+  color: #666;
+}
+
+.empty-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+
+/* RESPONSIVE HP */
+@media (max-width: 768px) {
+  .search-bar-wide {
+    flex-direction: column; /* Jadi atas bawah di HP */
+    border-radius: 20px;
+    padding: 15px;
+    gap: 15px;
+  }
+  .input-wide, .select-wide {
+    width: 100%;
+    border-bottom: 1px solid #eee;
+    border-radius: 10px;
+  }
+  .select-wide { margin-right: 0; }
+}
+
+/* --- NAVBAR MELAYANG --- */
+.navbar {
+  position: fixed; /* Kunci utama agar melayang */
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px 0;
+  z-index: 1000; /* Pastikan di atas semua elemen (termasuk slider) */
+  transition: all 0.8s ease; /* Animasi perubahan warna halus */
+  background: transparent;
+}
+
+/* Style saat Scroll (Sticky) */
+.navbar.sticky-nav {
+  background: rgba(255, 255, 255, 0.55); /* Putih agak transparan dikit */
+  padding: 15px 0; /* Sedikit mengecil biar rapi */
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08); /* Bayangan halus */
+  backdrop-filter: blur(10px); /* Efek blur di belakang navbar (keren!) */
+}
+
+/* Container dalam Navbar */
+.nav-container {
+  max-width: 1100px;       /* Samakan lebar dengan container web utama */
+  width: 100%;
+  margin: 0 auto;          /* Agar posisi di tengah layar */
+  padding: 0 20px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Logo */
+.nav-logo {
+  font-size: 24px;
+  font-weight: 800;
+  color: white; /* Awalnya putih karena background Hero Teal */
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+/* Saat sticky, logo jadi gelap biar kebaca di background putih */
+.sticky-nav .nav-logo {
+  color: #0f766e; 
+}
+
+/* Menu Links */
+.nav-links {
+  display: flex;
+  gap: 30px;
+  list-style: none;
+}
+
+.nav-links a {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 16px;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #fbbf24; /* Kuning emas saat hover */
+}
+
+/* Saat sticky, link jadi abu gelap */
+.sticky-nav .nav-links a {
+  color: #374151;
+}
+.sticky-nav .nav-links a:hover {
+  color: #0f766e;
+}
+
+/* Tombol Login/Mitra */
+.btn-login {
+  padding: 8px 20px;
+  border: 1px solid white;
+  border-radius: 20px;
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.btn-login:hover {
+  background: white;
+  color: #0f766e;
+}
+
+/* Saat sticky, tombol menyesuaikan */
+.sticky-nav .btn-login {
+  border-color: #0f766e;
+  color: #0f766e;
+}
+.sticky-nav .btn-login:hover {
+  background: #0f766e;
+  color: white;
+}
+
+/* =========================================
+   CSS HALAMAN DETAIL (MODERN LAYOUT)
+   ========================================= */
+
+.detail-header-bg {
+  height: 80px; /* Cukup tinggi untuk background navbar + hiasan */
+  background: linear-gradient(135deg, #0f766e 0%, #115e59 100%); /* TEAL GRADIENT */
+  width: 100%;
+  position: absolute; /* Supaya dia nempel di belakang konten */
+  top: 0;
+  left: 0;
+  z-index: 0; /* Di belakang konten */
+}
+
+.back-link {
+  color: white; /* Link jadi Putih */
+  font-weight: 600;
+  text-decoration: none;
+}
+.back-link:hover {
+  text-decoration: underline;
+  transform: none; /* Reset efek geser yang lama */
+}
+
+/* --- GRID LAYOUT UTAMA --- */
+.detail-container {
+  position: relative; 
+  z-index: 10; /* Di atas background */
+  margin-top: 100px; /* Turun sedikit biar pas di tengah layer hijau */
+}
+
+.detail-main {
+  margin-top: 120px; /* Jarak dari atas (biar gak nempel) */
+}
+
+.gallery-wrapper {
+  margin-bottom: 30px;
+  background: white;
+  padding: 5px; /* Bingkai putih tipis */
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* Kiri (2 bagian) : Kanan (1 bagian) */
+  gap: 10px; /* Jarak antar foto */
+  height: 400px; /* Tinggi total galeri */
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+/* Gambar Besar (Kiri) */
+.gallery-main {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Wrapper Kanan (Untuk 3 foto kecil) */
+.gallery-side {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+}
+
+.gallery-item {
+  flex: 1; /* Membagi tinggi rata 3 bagian */
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* Agar semua gambar mengisi kotak dengan rapi (Crop otomatis) */
+.img-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+/* Efek Zoom saat Hover */
+.gallery-main:hover .img-cover,
+.gallery-item:hover .img-cover {
+  transform: scale(1.05);
+}
+
+/* Overlay "+5 Foto Lainnya" */
+.overlay-more {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* Hitam transparan */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 18px;
+  pointer-events: none; /* Biar klik tembus ke div bawahnya */
+}
+
+.tag-badge {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 8px 16px;
+  border-radius: 30px;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+.tag-badge.Putra { background: #3b82f6; }
+.tag-badge.Putri { background: #ec4899; }
+.tag-badge.Campur { background: #8b5cf6; }
+
+.detail-section {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  margin-bottom: 25px;
+  border: 1px solid #eee;
+}
+
+.detail-title { font-size: 28px; margin-bottom: 10px; color: #111827; }
+.detail-address { font-size: 16px; color: #6b7280; margin-bottom: 20px; }
+
+.detail-meta {
+  display: flex;
+  gap: 20px;
+  background: #f9fafb;
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* Overlay Hitam Fullscreen */
+.lightbox-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.95); /* Hitam pekat transparan */
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px);
+}
+
+/* Container Gambar Tengah */
+.lightbox-content {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Gambar Utama */
+.lightbox-image {
+  max-width: 100%;
+  max-height: 85vh; /* Biar gak mentok atas bawah */
+  object-fit: contain; /* Tampilkan utuh, jangan dicrop */
+  border-radius: 4px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  animation: zoomIn 0.3s ease; /* Animasi muncul halus */
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Counter Halaman (1 / 10) */
+.lightbox-counter {
+  margin-top: 15px;
+  color: #fff;
+  font-size: 16px;
+  letter-spacing: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 5px 15px;
+  border-radius: 20px;
+}
+
+/* Tombol Navigasi Umum */
+.lightbox-btn {
+  position: absolute;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 40px;
+  cursor: pointer;
+  padding: 20px;
+  transition: all 0.2s;
+  z-index: 10001;
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  text-shadow: 0 0 10px rgba(255,255,255,0.5);
+}
+
+/* Posisi Tombol */
+.close-btn {
+  top: 20px;
+  right: 20px;
+  font-size: 30px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+  width: 50px; height: 50px;
+}
+
+.prev-btn {
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.next-btn {
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Tombol hover fix */
+.prev-btn:hover, .next-btn:hover {
+  transform: translateY(-50%) scale(1.2);
+}
+
+/* Facilities */
+.facilities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+.facility-item {
+  background: #f0fdfa;
+  color: #0f766e;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.detail-desc { line-height: 1.8; color: #4b5563; }
+
+/* Map */
+.map-frame {
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
+  border: 1px solid #ddd;
+}
+.map-note { display: block; margin-top: 10px; color: #999; font-style: italic; }
+
+
+/* --- KOLOM KANAN (Sidebar Sticky) --- */
+.detail-sidebar {
+  position: sticky; /* KUNCI AGAR NEMPEL */
+  top: 100px; /* Jarak dari atas layar saat scroll */
 }
 
-.kos-card:hover { transform: translateY(-5px); }
-
-.kos-card img { width: 100%; height: 200px; object-fit: cover; background: #ddd;}
-
-.kos-info { padding: 15px; }
-
-.tag {
-  font-size: 12px; font-weight: bold; padding: 5px 10px; border-radius: 20px;
-  display: inline-block; margin-bottom: 10px; color: white;
+.booking-card {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  border: 1px solid #eee;
 }
-.tag.putra { background-color: #3498db; }
-.tag.putri { background-color: #e91e63; }
-.tag.campur { background-color: #9b59b6; }
 
-h3 { font-size: 18px; margin-bottom: 5px; color: #333; }
+.booking-label { font-size: 14px; color: #6b7280; margin-bottom: 5px; }
+.booking-price { font-size: 28px; color: #f97316; font-weight: 800; }
+.per-month { font-size: 14px; color: #9ca3af; font-weight: normal; }
 
-.harga { font-weight: bold; color: #27ae60; font-size: 16px; margin-bottom: 5px; }
-.lokasi { font-size: 14px; color: #7f8c8d; margin-bottom: 15px;}
+.divider { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
 
-.btn-detail {
-  width: 100%; padding: 10px 0; background-color: #2c3e50; color: white;
-  border: none; border-radius: 6px; cursor: pointer; font-weight: bold;
+.owner-info { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+.owner-avatar {
+  width: 50px; height: 50px; background: #e5e7eb; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 24px;
 }
-.btn-detail:hover { background-color: #1a252f; }
+.owner-label { font-size: 12px; color: #999; }
+.owner-name { font-weight: bold; font-size: 16px; }
+
+.btn-chat-wa {
+  display: flex; justify-content: center; align-items: center; gap: 10px;
+  background-color: #25D366; /* Warna WA */
+  color: white;
+  text-decoration: none;
+  padding: 15px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 16px;
+  transition: 0.3s;
+  box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+}
+.btn-chat-wa:hover { background-color: #1ebc57; transform: translateY(-2px); }
+
+.safety-note {
+  margin-top: 20px;
+  font-size: 12px;
+  color: #6b7280;
+  background: #fff7ed;
+  padding: 10px;
+  border-radius: 8px;
+  border-left: 3px solid #f97316;
+  line-height: 1.5;
+}
+
+/* LOADING */
+.loading-state { text-align: center; padding: 100px; font-size: 20px; color: #666; }
+
+/* RESPONSIVE DETAIL */
+@media (max-width: 900px) {
+  .detail-container {
+    grid-template-columns: 1fr; /* Jadi 1 kolom di HP/Tablet */
+  }
+  .detail-hero-image { height: 250px; }
+  .detail-sidebar { position: static; /* Gak sticky lagi di HP */ }
+  .gallery-grid {
+    grid-template-columns: 1fr; /* Jadi 1 kolom */
+    height: auto;
+  }
+  .gallery-side {
+    display: none; /* Sembunyikan foto kecil di HP biar hemat tempat */
+  }
+  .gallery-main {
+    height: 250px; /* Tinggi gambar utama di HP */
+  }
+  .lightbox-btn { font-size: 24px; padding: 10px; }
+  .close-btn { top: 10px; right: 10px; width: 40px; height: 40px; }
+  .prev-btn { left: 5px; }
+  .next-btn { right: 5px; }
+}
+
+/* --- CONTAINER & GRID --- */
+.container {
+  max-width: 1100px;       /* Batasi lebar maksimal */
+  margin: 0 auto;          /* Center horizontally */
+  width: 100%;             /* Ambil penuh sampai batas max-width */
+  padding: 0 20px;         /* Padding kiri/kanan rapi */
+  box-sizing: border-box;  /* Pastikan padding tidak menambah lebar total */
+  display: block;          /* Pastikan elemen block agar margin auto bekerja */
+}
+
+.content-area { margin-top: -40px; /* Efek naik ke atas hero */ }
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #111827;
+}
+
+/* --- HEADER SECTION DENGAN TOMBOL --- */
+.slider-container {
+  position: relative; 
+  display: flex;
+  align-items: center;
+}
+
+.nav-btn {
+  position: absolute; /* Melayang di atas/samping konten */
+  top: 50%; /* Posisikan di tengah vertikal */
+  transform: translateY(-50%); /* Koreksi posisi tengah */
+  z-index: 10; /* Pastikan di atas kartu */
+  
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: none;
+  background: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* Shadow biar tombolnya "pop up" */
+  cursor: pointer;
+  font-size: 20px;
+  color: #0f766e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  opacity: 0.8; /* Sedikit transparan kalau gak di-hover */
+}
+
+.nav-btn:hover {
+  background-color: #0f766e;
+  color: white;
+  opacity: 1;
+  transform: translateY(-50%) scale(1.1); /* Efek membesar dikit pas hover */
+}
+
+/* Posisi Spesifik Kiri & Kanan */
+.left-btn {
+  left: -20px; /* Geser sedikit keluar ke kiri */
+}
+
+.right-btn {
+  right: -20px; /* Geser sedikit keluar ke kanan */
+}
+
+/* --- SLIDER CONTAINER (Pengganti Grid) --- */
+.kos-slider {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 10px 5px 20px 5px; /* Beri sedikit padding agar shadow tidak terpotong */
+  scroll-behavior: smooth;
+  width: 100%; /* Ambil lebar penuh */
+  
+  /* Sembunyikan Scrollbar */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-snap-type: x mandatory;
+}
+.kos-slider::-webkit-scrollbar { display: none; }
+
+/* Sembunyikan Scrollbar di Chrome/Safari */
+.kos-slider::-webkit-scrollbar {
+  display: none;
+}
+
+/* --- ITEM SLIDER --- */
+.kos-card.slider-item {
+  min-width: 280px;
+  max-width: 280px;
+  flex-shrink: 0;
+  scroll-snap-align: center; /* Ubah ke center biar pas di tengah saat berhenti */
+}
+
+/* Pastikan style card lainnya tetap sama seperti sebelumnya */
+
+/* --- KOS CARD DESIGN (Mirip Papikost) --- */
+.kos-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* Shadow tipis */
+  transition: all 0.3s ease;
+  border: 1px solid #f0f0f0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.kos-card:hover {
+  transform: translateY(-5px); /* Naik dikit pas hover */
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+
+.card-image-wrapper {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.kos-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s;
+}
+
+.kos-card:hover .kos-image {
+  transform: scale(1.05); /* Zoom effect pas hover */
+}
+
+/* Tag Tipe (Putra/Putri) */
+.tag-floating {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  z-index: 2;
+}
+.tag-floating.Putra { background-color: #3b82f6; } /* Biru */
+.tag-floating.Putri { background-color: #ec4899; } /* Pink */
+.tag-floating.Campur { background-color: #8b5cf6; } /* Ungu */
+
+.kos-info { padding: 18px; flex: 1; display: flex; flex-direction: column; }
+
+.kos-name {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #1f2937;
+  line-height: 1.4;
+}
+
+.kos-location {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Footer Card (Harga & Tombol) */
+.kos-footer {
+  margin-top: auto; /* Dorong ke paling bawah */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #f3f4f6;
+  padding-top: 15px;
+}
+
+.price-box { display: flex; flex-direction: column; }
+.price-box small { font-size: 11px; color: #9ca3af; }
+.price {
+  font-size: 16px;
+  font-weight: 700;
+  color: #f97316; /* Oranye Papikost */
+}
+
+.btn-detail-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f0fdfa;
+  color: #0f766e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.btn-detail-icon:hover {
+  background-color: #0f766e;
+  color: white;
+}
+
+/* --- EMPTY STATE --- */
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px;
+}
+.empty-state h3 { margin-top: 20px; color: #333; }
+
+/* --- SECTION KEUNGGULAN (Why Us) --- */
+.features-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-top: 80px; /* Jarak dari slider */
+  margin-bottom: 60px;
+  text-align: center;
+}
+
+.feature-item {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  transition: transform 0.3s;
+  border: 1px solid #f0f0f0;
+}
+
+.feature-item:hover {
+  transform: translateY(-5px);
+  border-color: #0f766e; /* Warna Teal pas hover */
+}
+
+.feature-icon {
+  font-size: 40px;
+  margin-bottom: 15px;
+  background-color: #f0fdfa; /* Hijau muda banget */
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.feature-item h3 {
+  font-size: 18px;
+  color: #111827;
+  margin-bottom: 10px;
+}
+
+.feature-item p {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+/* --- BANNER CTA (Call To Action) --- */
+.cta-banner {
+  background: linear-gradient(to right, #1f2937, #111827); /* Hitam/Abu gelap elegan */
+  border-radius: 20px;
+  padding: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  margin-bottom: 80px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-content {
+  max-width: 600px;
+  z-index: 2;
+}
+
+.cta-content h2 {
+  font-size: 28px;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.cta-content p {
+  font-size: 16px;
+  opacity: 0.8;
+  margin-bottom: 25px;
+}
+
+.btn-cta {
+  background-color: #f97316; /* Warna Orange */
+  color: white;
+  padding: 12px 30px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-cta:hover {
+  background-color: #ea580c;
+  transform: scale(1.05);
+}
+
+.cta-image {
+  font-size: 100px; /* Ukuran Emoji Rumah */
+  animation: float 3s ease-in-out infinite;
+  text-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+/* Animasi mengambang untuk icon rumah */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .hero-section { padding: 40px 20px 60px; }
+  .nav-links { display: none; }
+  .brand-title { font-size: 1.8rem; }
+  .search-box { border-radius: 20px; padding: 5px; flex-direction: column; gap: 0; }
+  .search-box input, .search-box select { width: 100%; border-radius: 15px; padding: 12px; }
+  .left-btn { left: 10px; }
+  .right-btn { right: 10px; }
+  .nav-btn { width: 35px; height: 35px; font-size: 16px; opacity: 0.9; }
+  .cta-banner {
+    flex-direction: column;
+    text-align: center;
+    padding: 30px;
+  }
+  .cta-image { margin-top: 30px; font-size: 60px; }
+}
+
+/* --- FOOTER SECTION --- */
+.site-footer {
+  background-color: #111827; /* Warna gelap senada dengan CTA */
+  color: #d1d5db; /* Warna teks abu terang */
+  padding-top: 60px;
+  margin-top: 50px; /* Jarak dari konten atas */
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr; /* Kolom 1 lebih lebar */
+  gap: 40px;
+  padding-bottom: 40px;
+}
+
+.footer-logo {
+  color: white;
+  font-size: 24px;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.footer-section h3 {
+  color: white;
+  font-size: 18px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.footer-section p {
+  line-height: 1.6;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.footer-section ul {
+  list-style: none;
+}
+
+.footer-section ul li {
+  margin-bottom: 10px;
+}
+
+.footer-section ul li a {
+  color: #d1d5db;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-section ul li a:hover {
+  color: #f97316; /* Warna Orange saat hover */
+  padding-left: 5px; /* Efek geser dikit */
+}
+
+.social-icons {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Footer Copyright Bawah */
+.footer-bottom {
+  background-color: #0f131a; /* Lebih gelap lagi */
+  text-align: center;
+  padding: 20px;
+  border-top: 1px solid #1f2937;
+  font-size: 13px;
+}
+
+/* Responsive Footer HP */
+@media (max-width: 768px) {
+  .footer-content {
+    grid-template-columns: 1fr; /* Jadi 1 kolom memanjang */
+    text-align: center;
+    gap: 30px;
+  }
+  
+  .social-icons {
+    justify-content: center;
+  }
+}
+
+/* CSS KHUSUS ADMIN */
+/* Container Utama Admin */
+.admin-container {
+  background: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 20px;
+  color: white;
+}
+
+.admin-header {
+  text-align: center;
+  margin-top: 40px;
+  margin-bottom: 30px;
+}
+
+/* Kartu Putih (Form & Tabel) */
+.admin-card {
+  background-color: #ffffff; /* Paksa background putih */
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  margin-bottom: 30px;
+  border: 1px solid #e0e0e0;
+}
+
+/* Jika sedang mode edit, beri border orange biar sadar */
+.mode-edit {
+  border: 2px solid #f39c12;
+}
+
+/* Grid System untuk Form (2 Kolom biar rapi) */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2 Kolom */
+  gap: 15px;
+}
+
+/* Di HP jadi 1 kolom */
+@media (max-width: 600px) {
+  .form-grid { grid-template-columns: 1fr; }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  color: #333;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1; /* Mengambil lebar penuh */
+  margin-top: 10px;
+}
+
+/* Style Input agar tidak aneh di Dark Mode */
+.admin-card input, 
+.admin-card select, 
+.admin-card textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff; /* Paksa background input putih */
+  color: #333; /* Paksa teks input hitam */
+  font-size: 14px;
+}
+
+.form-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+/* Tombol-tombol */
+.btn-primary {
+  flex: 1;
+  padding: 12px;
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.btn-primary:hover { background-color: #1a252f; }
+
+.btn-secondary {
+  padding: 12px 20px;
+  background-color: #95a5a6;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Tabel */
+.table-responsive {
+  overflow-x: auto; /* Biar bisa discroll kalau di HP */
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th {
+  background-color: #f8f9fa; /* Abu sangat muda */
+  color: #2c3e50;
+  padding: 12px;
+  text-align: left;
+  border-bottom: 2px solid #ddd;
+}
+
+.admin-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  color: #333; /* Paksa teks tabel hitam */
+}
+
+/* Target Input Textbiasa DAN Textarea */
+.admin-card input, 
+.admin-card select, 
+.admin-card textarea {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #333;
+  font-size: 14px;
+  width: 100%; /* Pastikan lebar penuh */
+  font-family: 'Poppins', sans-serif; /* Biar fontnya sama */
+}
+
+/* Khusus Textarea */
+.admin-card textarea {
+  resize: vertical; /* User cuma bisa tarik ke bawah, gak bisa ke samping (biar layout gak rusak) */
+  min-height: 100px; /* Tinggi minimal biar gak kekecilan */
+  line-height: 1.5;
+}
+
+.admin-card textarea:focus {
+  outline: none;
+  border-color: #0f766e; /* Warna Teal saat diklik */
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+}
+
+.kos-name { font-weight: bold; }
+.kos-type { font-size: 12px; color: #7f8c8d; }
+
+.action-cell { display: flex; gap: 5px; }
+
+.btn-edit {
+  background-color: #f39c12; color: white; border: none;
+  padding: 5px 10px; border-radius: 4px; cursor: pointer;
+}
+.btn-delete {
+  background-color: #e74c3c; color: white; border: none;
+  padding: 5px 10px; border-radius: 4px; cursor: pointer;
+}
+
+.preview-container {
+  margin-top: 10px;
+  background: #f8f9fa;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px dashed #ccc;
+  width: fit-content; /* Kotak mengikuti lebar gambar */
+}
+
+.img-preview-small {
+  height: 150px;       /* Tinggi fix biar rapi */
+  width: auto;         /* Lebar otomatis menyesuaikan rasio (GAK BAKAL GEPENG) */
+  max-width: 100%;     /* Tapi jangan sampai keluar layar */
+  object-fit: cover;   /* Potong rapi kalau rasionya aneh */
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  display: block;
+}
