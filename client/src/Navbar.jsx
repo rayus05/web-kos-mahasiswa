@@ -13,19 +13,10 @@ function Navbar() {
   // Fungsi untuk memantau scroll
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setSticky(true);
-      } else {
-        setSticky(false);
-      }
+      setSticky(window.scrollY > 20);
     };
-
     window.addEventListener('scroll', handleScroll);
-    
-    // Bersihkan event listener saat pindah halaman (biar gak error)
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const isDetailPage = location.pathname.startsWith('/kos/');
@@ -48,6 +39,9 @@ function Navbar() {
               {user ? (
                 // JIKA SUDAH LOGIN
                 <div className="user-menu">
+                  <Link to="/tambah-kos" className="btn-plus-kos" style={{textDecoration:'none'}}>
+                   <span>➕</span> Iklan Kos
+                  </Link>
                   <span className="user-greeting">Halo, <strong>{user.username.split(' ')[0]}</strong></span>
                   <button onClick={() => setShowLogout(true)} className="btn-logout-nav">
                     Logout ➜
@@ -59,13 +53,11 @@ function Navbar() {
                   Login / Daftar
                 </Link>
               )}
-            </div>
           </div>
+        </div>
       </nav>
 
-      {showLogout && (
-        <Logout onClose={() => setShowLogout(false)} />
-      )}
+      {showLogout &&  <Logout onClose={() => setShowLogout(false)} />}
     </>
   );
 }

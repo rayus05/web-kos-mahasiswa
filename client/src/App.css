@@ -224,29 +224,41 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  padding: 20px 0;
+  padding: 15px 0;
   z-index: 1000;
-  transition: all 0.8s ease;
+  transition: all 0.4s ease;
   background: transparent;
 }
 
 /* Style saat Scroll (Sticky) */
 .navbar.sticky-nav {
   background: rgba(255, 255, 255, 0.55);
-  padding: 15px 0;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  padding: 10px 0;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
   backdrop-filter: blur(10px);
+}
+
+/* Ubah warna teks jadi gelap biar kebaca di background putih */
+.navbar.sticky-nav .nav-logo { color: #0f766e; }
+.navbar.sticky-nav .nav-links a { color: #333; }
+.navbar.sticky-nav .user-greeting { color: #333; }
+.navbar.sticky-nav .btn-plus-kos {
+  background: #f0fdfa;
+  color: #0f766e;
+  border-color: #0f766e;
+}
+.navbar.sticky-nav .btn-plus-kos:hover {
+  background: #0f766e;
+  color: white;
 }
 
 /* Container dalam Navbar */
 .nav-container {
-  max-width: 1100px;
-  width: 100%;
+  max-width: 1200px;
+  width: 90%;
   margin: 0 auto;
-  padding: 0 20px;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
 }
 
@@ -256,12 +268,11 @@ body {
   font-weight: 800;
   color: white;
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-self: start;
   transition: color 0.3s;
-}
-
-/* Saat sticky, logo jadi gelap biar kebaca di background putih */
-.sticky-nav .nav-logo {
-  color: #0f766e; 
 }
 
 /* Menu Links */
@@ -269,18 +280,42 @@ body {
   display: flex;
   gap: 30px;
   list-style: none;
+  margin: 0;
+  padding: 0;
+  justify-self: center;
 }
 
 .nav-links a {
   color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
   font-weight: 500;
-  font-size: 16px;
-  transition: color 0.3s;
+  font-size: 15px;
+  transition: 0.3s;
+  position: relative;
+}
+
+/* Efek Garis Bawah saat Hover */
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -5px;
+  left: 50%;
+  background-color: #f97316;
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
 }
 
 .nav-links a:hover {
   color: #fbbf24;
+}
+.nav-links a:hover::after { width: 100%; }
+
+.nav-action {
+  justify-self: end; /* Paksa mepet kanan */
+  display: flex;
+  align-items: center;
 }
 
 /* Saat sticky, link jadi abu gelap */
@@ -291,21 +326,38 @@ body {
   color: #0f766e;
 }
 
-/* Tombol Login/Mitra */
-.btn-login {
-  padding: 8px 20px;
-  border: 1px solid white;
-  border-radius: 20px;
+/* Tombol Iklan Kos (+ Iklan Kos) */
+.btn-plus-kos {
+  display: flex;
+  align-items: center;
+  gap: 5px;
   color: white;
-  text-decoration: none;
   font-weight: 600;
-  transition: all 0.3s;
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: 0.3s;
+}
+.btn-plus-kos:hover {
+  background: white;
+  color: #0f766e; /* Jadi hijau teksnya */
 }
 
-.btn-login:hover {
-  background: white;
+/* Tombol Login/Mitra */
+.btn-login {
+  background-color: white;
   color: #0f766e;
+  padding: 10px 25px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
+
+.btn-login:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
 
 /* Saat sticky, tombol menyesuaikan */
 .sticky-nav .btn-login {
@@ -1392,6 +1444,154 @@ body {
   border: 1px solid #e5e7eb;
 }
 
+/* =========================================
+   VERIFIKASI / APPROVAL STYLES
+   ========================================= */
+
+/* Badge Notifikasi di Sidebar */
+.badge-pending {
+  background: #ef4444;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-left: 8px;
+  font-weight: bold;
+}
+
+.subtitle {
+  color: #64748b;
+  margin-bottom: 20px;
+  margin-top: -10px;
+  font-size: 14px;
+}
+
+/* Grid Layout Kartu Verifikasi */
+.grid-verifikasi {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* Kartu Verifikasi */
+.card-verify {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  border: 1px solid #e2e8f0;
+  transition: transform 0.2s;
+}
+
+.card-verify:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Gambar di Kartu */
+.verify-img-wrapper {
+  position: relative;
+  height: 160px;
+}
+
+.verify-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tag-verify {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: bold;
+  color: white;
+  text-transform: uppercase;
+}
+.tag-verify.Putra { background: #3b82f6; }
+.tag-verify.Putri { background: #ec4899; }
+.tag-verify.Campur { background: #8b5cf6; }
+
+
+/* Isi Kartu */
+.verify-body {
+  padding: 15px;
+}
+
+.verify-body h4 {
+  font-size: 16px;
+  margin-bottom: 5px;
+  color: #1e293b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.verify-owner {
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 5px;
+}
+
+.verify-price {
+  font-size: 16px;
+  font-weight: bold;
+  color: #0f766e;
+  margin-bottom: 10px;
+}
+
+.verify-details {
+  background: #f8fafc;
+  padding: 8px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.verify-details small {
+  color: #475569;
+  font-size: 11px;
+}
+
+/* Tombol Aksi */
+.verify-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-approve, .btn-reject {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  color: white;
+  font-size: 13px;
+}
+
+.btn-approve {
+  background-color: #10b981; /* Hijau */
+}
+
+.btn-reject {
+  background-color: #ef4444; /* Merah */
+}
+
+.btn-approve:hover, .btn-reject:hover {
+  opacity: 0.9;
+}
+
 /* --- HALAMAN AUTH (LOGIN/REGISTER) --- */
 .auth-container {
   min-height: 100vh;
@@ -1523,30 +1723,33 @@ body {
 .user-menu {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 20px;
 }
 
 .user-greeting {
   color: white;
   font-size: 14px;
+  font-weight: 500;
 }
 /* Kalau lagi sticky/scroll (background putih), teks greeting jadi gelap */
 .sticky-nav .user-greeting { color: #333; }
 
 .btn-logout-nav {
-  background: rgba(255,255,255,0.2);
-  border: 1px solid rgba(255,255,255,0.4);
+  background: #ef4444; /* Merah */
   color: white;
-  padding: 6px 15px;
+  border: none;
+  padding: 8px 18px;
   border-radius: 20px;
-  cursor: pointer;
   font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
   transition: 0.3s;
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
 }
 
 .btn-logout-nav:hover {
-  background: #ef4444;
-  border-color: #ef4444;
+  background: #dc2626;
+  transform: translateY(-2px);
 }
 
 /* Penyesuaian saat Navbar Sticky (Background Putih) */

@@ -20,8 +20,8 @@ function Footer() {
         <div className="footer-section">
           <h3>Navigasi</h3>
           <ul>
-            <li><a href="#">Beranda</a></li>
-            <li><a href="#">Cari Kos</a></li>
+            <li><a href="/">Beranda</a></li>
+            <li><a href="/cari">Cari Kos</a></li>
             <li><a href="#">Tentang Kami</a></li>
             <li><a href="#">Pusat Bantuan</a></li>
           </ul>

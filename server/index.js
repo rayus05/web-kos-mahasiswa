@@ -121,14 +121,15 @@ app.post('/api/auth/login', authLimiter, async (req, res) => {
   }
 });
 
-  // Route untuk mendapatkan semua data kos
+  // --- ROUTE GET PUBLIC (Cuma tampilkan yang disetujui) ---
 app.get('/api/kos', async (req, res) => {
   try {
-    const semuaKos = await Kos.find();
-    res.json(semuaKos);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+    // Filter status: 'approved'
+    // Kalau Admin yang minta (lewat dashboard), mungkin butuh semua.
+    // Tapi untuk simpelnya, API ini kita khususkan buat Public Home Page.
+    const kos = await Kos.find({ status: 'approved' }); 
+    res.json(kos);
+  } catch (error) { res.status(500).json({ message: error.message }); }
 });
 
 // Middleware untuk akses folder 'uploads' secara statis
@@ -148,7 +149,11 @@ app.get('/api/kos/:id', async (req, res) => {
 // Route untuk menambahkan data kos baru
 app.post('/api/kos', async (req, res) => {
   try {
-    const kosBaru = new Kos(req.body);
+    const kosBaru = new Kos({
+      ...req.body,
+      status: 'pending',
+      pemilikId: req.body.userId
+    });
     const kosTersimpan = await kosBaru.save();
     res.status(201).json(kosTersimpan);
   } catch (error) {
@@ -258,4 +263,25 @@ app.delete('/api/users/:id', async (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
+});
+
+// --- ROUTE KHUSUS ADMIN (Lihat SEMUA data, termasuk pending) ---
+app.get('/api/admin/kos', async (req, res) => {
+  try {
+    const kos = await Kos.find().populate('pemilikId', 'nama email');
+    res.json(kos);
+  } catch (error) { res.status(500).json({ message: error.message }); }
+});
+
+// --- ROUTE BARU: VERIFIKASI KOS (Approve/Reject) ---
+app.put('/api/kos/:id/verify', async (req, res) => {
+  try {
+    const { status } = req.body;
+    const updatedKos = await Kos.findByIdAndUpdate(
+      req.params.id, 
+      { status: status }, 
+      { new: true }
+    );
+    res.json(updatedKos);
+  } catch (error) { res.status(400).json({ message: error.message }); }
 });

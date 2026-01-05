@@ -20,7 +20,7 @@ function Login() {
         alert("Selamat datang, Bos Admin! 🫡");
         navigate('/admin');
       } else {
-        alert(`Selamat datang kembali, ${res.data.user.nama}!`);
+        alert(`Selamat datang kembali, ${res.data.user.username}!`);
         navigate('/');
       }
     } catch (err) {

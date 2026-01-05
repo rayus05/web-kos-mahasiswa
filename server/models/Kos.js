@@ -36,6 +36,14 @@ const kosSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    pemilikId: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'User' },
+    status: { 
+    type: String, 
+    enum: ['pending', 'approved', 'rejected'], 
+    default: 'pending'
+  },
     createdAt: { 
         type: Date, default: Date.now 
     }

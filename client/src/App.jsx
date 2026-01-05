@@ -6,6 +6,7 @@ import Navbar from './Navbar';
 import Home from './Home';
 import CariKos from './CariKos';
 import DetailKos from './DetailKos';
+import TambahKos from './TambahKos';
 import AdminDashboard from './AdminDashboard';
 import './App.css';
 
@@ -24,6 +25,7 @@ function AppContent() {
         <Route path="/" element={<Home />} />
         <Route path="/kos/:id" element={<DetailKos />} />
         <Route path="/cari" element={<CariKos />} />
+        <Route path="tambah-kos" element={<TambahKos />} />
         <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </>

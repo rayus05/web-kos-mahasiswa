@@ -72,10 +72,20 @@ function AdminDashboard() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/kos');
+      const response = await axios.get('http://localhost:5000/api/admin/kos');
       setKosList(response.data);
     } catch (error) {
       console.error("Error ambil data:", error);
+    }
+  };
+
+  const handleVerify = async (id, statusBaru) => {
+    try {
+      await axios.put(`http://localhost:5000/api/kos/${id}/verify`, { status: statusBaru });
+      alert(`Kos berhasil di-${statusBaru}!`);
+      fetchKos(); // Refresh tabel
+    } catch (error) {
+      alert("Gagal update status.");
     }
   };
 
@@ -162,7 +172,6 @@ function AdminDashboard() {
 
   return (
     <div className="admin-wrapper">
-      {/* SIDEBAR SEDERHANA */}
       <div className="admin-sidebar">
         <h2 className="admin-logo">AdminPanel ⚙️</h2>
         <ul className="admin-menu">
@@ -174,6 +183,12 @@ function AdminDashboard() {
           </li>
           <li className={activeTab === 'users' ? 'active' : ''} onClick={() => setActiveTab('users')}>
             👥 Data Pengguna
+          </li>
+          <li className={activeTab === 'verifikasi' ? 'active' : ''} onClick={() => setActiveTab('verifikasi')}>
+            ✅ Verifikasi Mitra
+            {kosList.filter(k => k.status === 'pending').length > 0 && (
+               <span className="badge-pending">{kosList.filter(k => k.status === 'pending').length}</span>
+            )}
           </li>
         </ul>
         <button onClick={logout} className="btn-logout-admin">Keluar</button>
@@ -388,6 +403,64 @@ function AdminDashboard() {
                 <p style={{textAlign:'center', padding:'20px'}}>Belum ada user lain terdaftar.</p>
               )}
             </div>
+          </div>
+        )}
+
+        {/* === TAB 4: VERIFIKASI (APPROVAL) === */}
+        {activeTab === 'verifikasi' && (
+          <div className="verifikasi-section">
+            <h2>Permintaan Verifikasi Iklan</h2>
+            <p className="subtitle">Setujui iklan mitra agar tayang di halaman depan.</p>
+            
+            {kosList.filter(k => k.status === 'pending').length === 0 ? (
+              <div className="empty-state-admin">
+                 <p>🎉 Semua aman! Tidak ada antrian verifikasi.</p>
+              </div>
+            ) : (
+              <div className="grid-verifikasi">
+                {kosList.filter(k => k.status === 'pending').map(kos => (
+                  <div key={kos._id} className="card-verify">
+                    
+                    {/* Gambar Thumbnail */}
+                    <div className="verify-img-wrapper">
+                       <img 
+                         src={kos.foto && kos.foto[0] ? kos.foto[0] : "https://via.placeholder.com/300"} 
+                         alt={kos.nama} 
+                       />
+                       <span className={`tag-verify ${kos.tipe}`}>{kos.tipe}</span>
+                    </div>
+
+                    <div className="verify-body">
+                      <h4>{kos.nama}</h4>
+                      <p className="verify-owner">
+                        👤 Oleh: <strong>{kos.pemilikId ? kos.pemilikId.nama : 'Admin'}</strong>
+                      </p>
+                      <p className="verify-price">Rp {kos.harga.toLocaleString()}</p>
+                      
+                      <div className="verify-details">
+                         <small>📍 {kos.alamat}</small>
+                         <small>📝 {kos.deskripsi ? kos.deskripsi.substring(0, 50) + '...' : '-'}</small>
+                      </div>
+
+                      <div className="verify-actions">
+                        <button 
+                          onClick={() => handleVerify(kos._id, 'approved')} 
+                          className="btn-approve"
+                        >
+                          ✅ Terima
+                        </button>
+                        <button 
+                          onClick={() => handleVerify(kos._id, 'rejected')} 
+                          className="btn-reject"
+                        >
+                          ❌ Tolak
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>
