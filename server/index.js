@@ -211,7 +211,26 @@ app.post('/api/upload', upload.array('images', 10), (req, res) => {
   }
 });
 
-// --- Jalankan Server ---
+// --- API STATISTIK DASHBOARD ADMIN ---
+app.get('/api/stats', async (req, res) => {
+  try {
+    const totalKos = await Kos.countDocuments();
+    const totalUser = await User.countDocuments();
+    
+    const kosPutra = await Kos.countDocuments({ tipe: 'Putra' });
+    const kosPutri = await Kos.countDocuments({ tipe: 'Putri' });
+    const kosCampur = await Kos.countDocuments({ tipe: 'Campur' });
+
+    res.json({
+      totalKos,
+      totalUser,
+      detailTipe: { Putra: kosPutra, Putri: kosPutri, Campur: kosCampur }
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
