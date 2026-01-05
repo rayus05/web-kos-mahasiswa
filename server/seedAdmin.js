@@ -4,7 +4,7 @@ const User = require('./models/User'); // Pastikan path ini benar
 require('dotenv').config();
 
 // Ganti URI ini sesuai dengan yang di .env kamu atau hardcode sementara
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/zonakampus';
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/edukost';
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
@@ -14,7 +14,7 @@ const createAdmin = async () => {
     console.log("🔌 Terhubung ke MongoDB...");
 
     // Cek apakah admin sudah ada?
-    const adminExists = await User.findOne({ email: 'admin@zonakampus.com' });
+    const adminExists = await User.findOne({ email: 'admin@edukost.com' });
     if (adminExists) {
       console.log("⚠️ Admin sudah ada! Tidak perlu dibuat lagi.");
       return;

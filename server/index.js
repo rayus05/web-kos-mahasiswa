@@ -231,6 +231,31 @@ app.get('/api/stats', async (req, res) => {
   }
 });
 
+// --- MANAJEMEN USER (ADMIN ONLY) ---
+
+// GET ALL USERS (Ambil semua user)
+app.get('/api/users', async (req, res) => {
+  try {
+    // .select('-password') artinya: Ambil semua data KECUALI password
+    // Kita gak boleh kirim password orang lain ke frontend (bahaya!)
+    const users = await User.find().select('-password').sort({ createdAt: -1 });
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// DELETE USER (Hapus user)
+app.delete('/api/users/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await User.findByIdAndDelete(id);
+    res.json({ message: "User berhasil dihapus!" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });

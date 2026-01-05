@@ -35,7 +35,7 @@ function Navbar() {
       <nav className={`navbar ${sticky ? 'sticky-nav' : ''} ${isDetailPage ? 'navbar-detail' : ''}`}>
         <div className="nav-container">
           <Link to="/" className="nav-logo">
-            ZonaKampus🎓
+            EduKost 🎓
           </Link>
 
           <ul className="nav-links">

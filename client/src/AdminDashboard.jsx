@@ -15,6 +15,7 @@ function AdminDashboard() {
     jarak: '', fasilitas: '', deskripsi: '', foto: [], kontak: ''
   });
   const { user, logout } = useContext(AuthContext);
+  const [userList, setUserList] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,17 +32,42 @@ function AdminDashboard() {
     }
 
     // Kalau lolos, baru ambil data
-    if (user.role === 'admin') {
+    if (user && user.role === 'admin') {
       fetchStats();
       fetchData();
+      fetchUsers();
     }
-  }, [user, navigate]);
+  }, [user, activeTab]);
 
   const fetchStats = async () => {
     try {
       const res = await axios.get('http://localhost:5000/api/stats');
       setStats(res.data);
     } catch (err) { console.error("Gagal ambil stats"); }
+  };
+
+  // FUNGSI AMBIL DATA USER
+  const fetchUsers = async () => {
+    try {
+      const res = await axios.get('http://localhost:5000/api/users');
+      setUserList(res.data);
+    } catch (error) {
+      console.error("Gagal ambil user:", error);
+    }
+  };
+
+  // FUNGSI HAPUS USER
+  const handleDeleteUser = async (id, usernameUser) => {
+    if (window.confirm(`Yakin ingin memblokir/menghapus user "${usernameUser}"?`)) {
+      try {
+        await axios.delete(`http://localhost:5000/api/users/${id}`);
+        alert("User berhasil dihapus!");
+        fetchUsers();
+        fetchStats();
+      } catch (error) {
+        alert("Gagal menghapus user.");
+      }
+    }
   };
 
   const fetchData = async () => {
@@ -310,8 +336,58 @@ function AdminDashboard() {
         {/* === TAB 3: DATA PENGGUNA (Next Project) === */}
         {activeTab === 'users' && (
           <div className="users-section">
-             <h2>Data Pengguna Terdaftar</h2>
-             <p>Fitur manajemen user akan segera hadir.</p>
+            <h2 style={{marginBottom: '20px'}}>Manajemen Pengguna ({userList.length})</h2>
+            
+            <div className="table-responsive admin-card">
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Bergabung</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {userList.map((u, index) => (
+                    <tr key={u._id}>
+                      <td>{index + 1}</td>
+                      <td>
+                        <div style={{fontWeight: 'bold'}}>{u.username}</div>
+                        {/* Tandai kalau ini akun sendiri */}
+                        {u.email === user.email && <small style={{color:'#0f766e'}}>(Akun Saya)</small>}
+                      </td>
+                      <td>{u.email}</td>
+                      <td>
+                        {/* Badge Role */}
+                        <span className={`role-badge ${u.role}`}>
+                          {u.role.toUpperCase()}
+                        </span>
+                      </td>
+                      <td>{new Date(u.createdAt).toLocaleDateString()}</td>
+                      <td>
+                        {/* Jangan biarkan admin menghapus dirinya sendiri! */}
+                        {u.email !== user.email && (
+                          <button 
+                            onClick={() => handleDeleteUser(u._id, u.username)} 
+                            className="btn-delete"
+                            title="Hapus User"
+                          >
+                            Hapus 🗑️
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              
+              {userList.length === 0 && (
+                <p style={{textAlign:'center', padding:'20px'}}>Belum ada user lain terdaftar.</p>
+              )}
+            </div>
           </div>
         )}
       </div>

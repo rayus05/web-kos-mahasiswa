@@ -9,7 +9,7 @@ function Footer() {
         
         {/* Kolom 1: Brand & Deskripsi */}
         <div className="footer-section brand-area">
-          <h2 className="footer-logo">ZonaKampus🎓</h2>
+          <h2 className="footer-logo">EduKost🎓</h2>
           <p>
             Platform pencarian kos mahasiswa nomor #1 di Palembang. 
             Aman, nyaman, dan dekat kampus.
@@ -32,7 +32,7 @@ function Footer() {
           <h3>Hubungi Kami</h3>
           <p>📍 Jl. Kampus Merdeka No. 45</p>
           <p>📞 +62 812-3456-7890</p>
-          <p>📧 support@zonakampus.com</p>
+          <p>📧 support@EduKost.com</p>
           
           <div className="social-icons">
             <span>📷</span> <span>🐦</span> <span>📘</span>
@@ -42,7 +42,7 @@ function Footer() {
       </div>
 
       <div className="footer-bottom">
-        <p id="footer-text">&copy; {year} ZonaKampus Mahasiswa - Cari Kost Nyaman, Kuliah jadi Aman.</p>
+        <p id="footer-text">&copy; {year} EduKost - Cari Kost Nyaman, Kuliah jadi Aman.</p>
       </div>
     </footer>
   );

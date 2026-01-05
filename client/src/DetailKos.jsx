@@ -36,7 +36,7 @@ function DetailKos() {
   if (!kos) return <div className="loading-state">⏳ Sedang memuat data kos...</div>;
 
   const photos = Array.isArray(kos.foto) ? kos.foto : [kos.foto].filter(Boolean);
-  const pesanWA = `Halo, saya lihat info *${kos.nama}* di ZonaKampus. Apakah kamar ini masih tersedia?`;
+  const pesanWA = `Halo, saya lihat info *${kos.nama}* di EduKost. Apakah kamar ini masih tersedia?`;
   const linkWA = `https://wa.me/${kos.kontak}?text=${encodeURIComponent(pesanWA)}`;
   const mapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(kos.alamat)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
   

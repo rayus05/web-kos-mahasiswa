@@ -48,7 +48,7 @@ function Home() {
     <div className="main-wrapper">
       <div className="hero-section">
         <div className="container">
-          <h1 className="brand-title">Zona Kampus 🎓</h1>
+          <h1 className="brand-title">EduKost 🎓</h1>
           <p className="brand-tagline">Cari kost nyaman, kuliah jadi aman.</p>
           <div className="search-box">
             <input 

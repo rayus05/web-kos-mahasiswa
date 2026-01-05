@@ -23,7 +23,7 @@ function Register() {
     <div className="auth-container">
       <div className="auth-card">
         <h2>Daftar Akun Baru 🚀</h2>
-        <p>Gabung komunitas ZonaKampus sekarang</p>
+        <p>Gabung komunitas EduKost sekarang</p>
         
         {error && <div className="error-msg">{error}</div>}
 
