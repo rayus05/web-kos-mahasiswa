@@ -8,9 +8,9 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
-    const token = localStorage.getItem('token');
+    const storedtoken = localStorage.getItem('token');
     
-    if (storedUser && token) {
+    if (storedUser && storedtoken) {
       setUser(JSON.parse(storedUser));
     }
     setLoading(false);
@@ -28,6 +28,22 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('token');
     window.location.href = '/';
   };
+
+  if (loading) {
+    return (
+      <div style={{ 
+        height: '100vh', 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center',
+        background: '#f3f4f6',
+        color: '#0f766e',
+        fontWeight: 'bold'
+      }}>
+        ⏳ Sedang memuat data akun...
+      </div>
+    );
+  }
 
   return (
     <AuthContext.Provider value={{ user, login, logout, loading }}>

@@ -40,8 +40,6 @@ function Navbar() {
 
           <ul className="nav-links">
             <li><Link to="/">Beranda</Link></li>
-            <li><a href="#rekomendasi">Rekomendasi</a></li>
-            <li><a href="#fitur">Keunggulan</a></li>
             <li><Link to="/cari">Cari Kost</Link></li>
           </ul>
 
