@@ -17,6 +17,11 @@ const Kos = require('./models/Kos');
 
 const app = express();
 const port = process.env.PORT || 5000;
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+  });
+}
 
 cloudinary.v2.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -311,10 +316,6 @@ app.delete('/api/users/:id', async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-});
-
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
 });
 
 // --- ROUTE KHUSUS ADMIN (Lihat SEMUA data, termasuk pending) ---
