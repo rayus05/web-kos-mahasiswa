@@ -32,7 +32,7 @@ cloudinary.v2.config({
 // --- Middleware (Satpam/Perantara) ---
 app.use(cors({
   origin: [
-    "https://edukost.vercel.app", // URL Frontend Vercel Kamu (Sesuai Log Error)
+    "https://web-kos-mahasiswa-gp26.vercel.app", // URL Frontend Vercel Kamu (Sesuai Log Error)
     "http://localhost:5173" // Biar di laptop tetap jalan
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
