@@ -1,0 +1,340 @@
+/* =========================================
+   HALAMAN DETAIL KOS (PREMIUM STYLE)
+   ========================================= */
+
+/* --- 1. LAYOUT UTAMA --- */
+.detail-header-bg {
+  height: 250px;
+  background: linear-gradient(135deg, #0f766e 0%, #115e59 100%); /* Teal Gradient */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 0;
+}
+
+.detail-container {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 350px; /* Kiri (Konten) 1fr, Kanan (Sidebar) 350px */
+  gap: 40px;
+  margin-top: 40px; /* Turun dikit biar masuk area header hijau */
+  margin-bottom: 60px;
+  align-items: start;
+}
+
+.detail-main {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+/* --- 2. GALERI FOTO (GRID MODERN) --- */
+.gallery-wrapper {
+  margin-bottom: 30px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* Kiri Besar, Kanan Kecil */
+  gap: 10px;
+  height: 400px;
+}
+
+.gallery-main {
+  position: relative;
+  cursor: pointer;
+  height: 100%;
+}
+
+.gallery-side {
+  display: grid;
+  grid-template-rows: 1fr 1fr; /* 2 Baris di kanan */
+  gap: 10px;
+  height: 100%;
+}
+
+/* Menangani grid item ke-3 agar bisa split lagi kalau mau, 
+   atau biarkan tumpuk 2 foto saja di kanan */
+.gallery-item {
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.img-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.gallery-main:hover .img-cover,
+.gallery-item:hover .img-cover {
+  transform: scale(1.05); /* Efek Zoom saat hover */
+}
+
+/* Badge Tipe Kos di Foto Utama */
+.tag-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  padding: 6px 14px;
+  border-radius: 30px;
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  z-index: 2;
+}
+.tag-badge.Putra { background: #3b82f6; }
+.tag-badge.Putri { background: #ec4899; }
+.tag-badge.Campur { background: #8b5cf6; }
+
+/* Overlay "+3 Foto Lainnya" */
+.overlay-more {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 18px;
+  pointer-events: none;
+}
+
+/* --- 3. KONTEN & TEXT --- */
+.detail-section {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f1f5f9;
+}
+.detail-section:last-child { border-bottom: none; }
+
+.detail-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #1e293b;
+  margin-bottom: 10px;
+}
+
+.detail-address {
+  color: #64748b;
+  font-size: 15px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.detail-meta {
+  display: flex;
+  gap: 20px;
+  font-size: 14px;
+  color: #475569;
+  background: #f8fafc;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.detail-section h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #334155;
+  margin-bottom: 15px;
+}
+
+.detail-desc {
+  line-height: 1.8;
+  color: #475569;
+  font-size: 15px;
+  white-space: pre-line; /* Agar enter/paragraf terbaca */
+}
+
+/* --- 4. FASILITAS (TAGS STYLE) --- */
+.facilities-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.facility-item {
+  background: #f0fdfa; /* Hijau muda pudar */
+  color: #0f766e;
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid #ccfbf1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* --- 5. SIDEBAR BOOKING (STICKY) --- */
+.detail-sidebar {
+  position: sticky;
+  top: 100px; /* Jarak dari atas saat discroll */
+}
+
+.booking-card {
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1); /* Shadow tebal biar melayang */
+  border: 1px solid #e2e8f0;
+}
+
+.booking-label { font-size: 13px; color: #64748b; margin-bottom: 5px; }
+
+.booking-price {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f766e;
+  margin-bottom: 20px;
+}
+.per-month { font-size: 14px; color: #94a3b8; font-weight: normal; }
+
+.divider { border: 0; border-top: 1px solid #f1f5f9; margin: 20px 0; }
+
+.owner-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.owner-avatar {
+  width: 45px;
+  height: 45px;
+  background: #e2e8f0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.owner-label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+.owner-name { font-weight: bold; color: #334155; font-size: 15px; }
+
+/* TOMBOL WHATSAPP */
+.btn-chat-wa {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px;
+  background: #25D366; /* Warna WA */
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 12px;
+  transition: 0.3s;
+  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+}
+
+.btn-chat-wa:hover {
+  background: #22c55e;
+  transform: translateY(-2px);
+}
+
+.btn-chat-wa.locked {
+  background: #cbd5e1; /* Abu-abu kalau terkunci */
+  color: #64748b;
+  cursor: pointer; /* Tetap pointer biar user tau bisa diklik buat login */
+  box-shadow: none;
+}
+.btn-chat-wa.locked:hover { background: #94a3b8; color: white; }
+
+.safety-note {
+  margin-top: 15px;
+  font-size: 11px;
+  color: #64748b;
+  text-align: center;
+  line-height: 1.4;
+  background: #fffbeb;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #fef3c7;
+}
+
+/* --- 6. LIGHTBOX MODAL (SLIDESHOW) --- */
+.lightbox-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(5px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+}
+
+.lightbox-image {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 4px;
+  box-shadow: 0 0 50px rgba(0,0,0,0.5);
+}
+
+.lightbox-btn {
+  position: absolute;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  border: none;
+  font-size: 30px;
+  cursor: pointer;
+  padding: 20px;
+  transition: 0.2s;
+  border-radius: 50%;
+  width: 60px; height: 60px;
+  display: flex; align-items: center; justify-content: center;
+}
+.lightbox-btn:hover { background: rgba(255,255,255,0.3); }
+
+.close-btn { top: 20px; right: 20px; font-size: 24px; }
+.prev-btn { left: 20px; }
+.next-btn { right: 20px; }
+
+.lightbox-counter {
+  text-align: center; color: white; margin-top: 10px; font-size: 14px; letter-spacing: 1px;
+}
+
+/* --- RESPONSIVE MOBILE --- */
+@media (max-width: 900px) {
+  .detail-container {
+    grid-template-columns: 1fr; /* Jadi 1 kolom */
+    margin-top: 20px;
+  }
+  
+  .detail-sidebar {
+    position: static; /* Gak sticky lagi di HP */
+    order: -1; /* Taruh Booking Card DI ATAS konten (biar user langsung liat harga) */
+    margin-bottom: 20px;
+  }
+  
+  .gallery-grid {
+    height: 250px; /* Gambar lebih pendek di HP */
+  }
+
+  .detail-meta {
+    flex-direction: column; /* Jarak & Tanggal jadi susun bawah */
+    gap: 10px;
+  }
+}

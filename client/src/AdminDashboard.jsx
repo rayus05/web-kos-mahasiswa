@@ -11,6 +11,7 @@ function AdminDashboard() {
   const [selectedVerifyKos, setSelectedVerifyKos] = useState(null);
   const [editId, setEditId] = useState(null);
   const [imageFiles, setImageFiles] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     nama: '', tipe: 'Campur', harga: '', alamat: '', 
     jarak: '', fasilitas: '', deskripsi: '', foto: [], kontak: ''
@@ -97,50 +98,68 @@ function AdminDashboard() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Modifikasi Handle Submit untuk Upload
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    try {
-      let finalFotoUrls = formData.foto;
+    setLoading(true);
 
-      // 1. Jika ada file gambar yang dipilih, UPLOAD DULU
+    try {
+      let finalFotoUrls = formData.foto || []; // Pakai foto lama kalau tidak upload baru
+
+      // --- LANGKAH 1: UPLOAD FOTO KE CLOUDINARY (Jika ada file dipilih) ---
       if (imageFiles.length > 0) {
+        console.log("1. Mengupload foto ke Cloudinary...");
+        
         const uploadData = new FormData();
         for (let i = 0; i < imageFiles.length; i++) {
-          uploadData.append('images', imageFiles[i]);
+          uploadData.append('images', imageFiles[i]); // Kuncinya wajib 'images'
         }
 
-        const uploadRes = await axios.post('http://localhost:5000/api/upload', uploadData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
+        const uploadRes = await axios.post('http://localhost:5000/api/upload', uploadData);
         
-        finalFotoUrls = uploadRes.data.urls;
+        // Ambil URL dari respon backend
+        const newUrls = uploadRes.data.urls; 
+        
+        if (newUrls && newUrls.length > 0) {
+           finalFotoUrls = newUrls; // Pakai URL baru dari Cloudinary
+        }
       }
 
-      // 2. Siapkan data akhir
-      const dataSiapKirim = {
+      // --- LANGKAH 2: SIAPKAN DATA UNTUK DISIMPAN ---
+      const payload = {
         ...formData,
-        foto: finalFotoUrls,
-        fasilitas: typeof formData.fasilitas === 'string' 
-          ? formData.fasilitas.split(',').map(item => item.trim()) 
-          : formData.fasilitas
+        foto: finalFotoUrls, // Masukkan array URL foto (bukan file fisik)
+        userId: user.id      // PENTING: Masukkan ID Admin sebagai pemilik
       };
 
-      // 3. Simpan ke Database (Sama seperti sebelumnya)
+      console.log("2. Mengirim data ke Database:", payload);
+
+      // --- LANGKAH 3: PILIH UPDATE ATAU CREATE ---
       if (editId) {
-        await axios.put(`http://localhost:5000/api/kos/${editId}`, dataSiapKirim);
-        alert("✅ Data berhasil diperbarui!");
+        // Mode Edit (PUT)
+        await axios.put(`http://localhost:5000/api/kos/${editId}`, payload);
+        alert("✅ Data kos berhasil diperbarui!");
       } else {
-        await axios.post('http://localhost:5000/api/kos', dataSiapKirim);
-        alert("✅ Data berhasil ditambahkan!");
+        // Mode Tambah Baru (POST)
+        await axios.post('http://localhost:5000/api/kos', payload);
+        alert("✅ Data kos baru berhasil disimpan!");
       }
 
-      resetForm();
-      fetchData();
-    } catch (error) {
-      console.error(error);
-      alert("❌ Gagal menyimpan data (Cek koneksi backend).");
+      // --- LANGKAH 4: RESET FORM & REFRESH ---
+      setFormData({
+        nama: '', tipe: 'Campur', harga: '', alamat: '', 
+        jarak: '', fasilitas: '', kontak: '', deskripsi: '', foto: []
+      });
+      setImageFiles([]);
+      setEditId(null);
+      
+      fetchData(); // Ambil data terbaru biar tabel langsung update
+
+    } catch (err) {
+      console.error("Gagal menyimpan:", err);
+      // Tampilkan pesan error yang jelas dari backend
+      alert("Gagal menyimpan data: " + (err.response?.data?.message || err.message));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -307,8 +326,8 @@ function AdminDashboard() {
               </div>
 
               <div className="form-actions">
-                <button type="submit" className="btn-primary">
-                  {editId ? 'Update Data' : 'Simpan Data'}
+                <button type="submit" className="btn-primary" disabled={loading}>
+                  {loading ? '⏳ Sedang Menyimpan...' : (editId ? 'Update Data' : 'Simpan Data')}
                 </button>
                 {editId && (
                   <button type="button" onClick={resetForm} className="btn-secondary">

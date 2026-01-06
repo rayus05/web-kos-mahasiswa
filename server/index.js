@@ -2,6 +2,9 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const multer = require('multer');
+const cloudinary = require('cloudinary');
+const multerCloudinary = require('multer-storage-cloudinary');
+const CloudinaryStorage = multerCloudinary.CloudinaryStorage || multerCloudinary;
 const path = require('path');
 const fs = require('fs');
 const bcrypt = require('bcryptjs');
@@ -15,9 +18,16 @@ const Kos = require('./models/Kos');
 const app = express();
 const port = process.env.PORT || 5000;
 
+cloudinary.v2.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
 // --- Middleware (Satpam/Perantara) ---
 app.use(cors());              // Bolehkan akses dari luar
 app.use(express.json());      // Agar server bisa baca data format JSON
+app.use(express.urlencoded({ extended: true }));
 
 // --- Koneksi ke Database MongoDB ---
 const uri = process.env.MONGO_URI;
@@ -36,35 +46,65 @@ const authLimiter = rateLimit({
   message: "Terlalu banyak permintaan daftar/login dari IP ini, silakan coba lagi nanti."
 });
 
-// --- Setup Multer untuk Upload Gambar ---
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Simpan di folder 'uploads'
+// Storage Engine Cloudinary
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'edukost_uploads',
+    allowed_formats: ['jpg', 'png', 'jpeg'],
   },
-  filename: (req, file, cb) => {
-    // Beri nama unik: timestamp + ekstensi asli (misal: 17345678.jpg)
-    cb(null, Date.now() + path.extname(file.originalname));
-  }
 });
-const upload = multer({ storage });
 
-// FUNGSI PENGHAPUS FILE FISIK
-const hapusFotoLama = (fotoArray) => {
-  // Cek apakah url-nya valid dan berasal dari folder uploads kita
-  if (!fotoArray || !Array.isArray(fotoArray)) return;
+const upload = multer({ storage: storage });
 
-  fotoArray.forEach(fileUrl => {
-    if (fileUrl && fileUrl.includes('/uploads/')) {
-      const filename = fileUrl.split('/uploads/')[1];
-      const filepath = path.join(__dirname, 'uploads', filename);
+// --- FUNGSI BARU: HAPUS FOTO DARI CLOUDINARY (YANG SUDAH DIPERBAIKI) ---
+const hapusFotoLama = async (fotoArray) => {
+  if (!fotoArray || !Array.isArray(fotoArray) || fotoArray.length === 0) return;
+
+  const deletePromises = fotoArray.map(async (fileUrl) => {
+    try {
+      if (!fileUrl.includes('cloudinary.com')) return;
+
+      // --- LOGIKA BARU: EKSTRAK PUBLIC ID YANG LEBIH AMAN ---
+      // 1. Kita potong URL berdasarkan kata kunci "upload/"
+      // Contoh URL: https://res.cloudinary.com/.../image/upload/v1767727262/edukost_uploads/gambar123.jpg
+      const splitUrl = fileUrl.split('upload/');
       
-      fs.access(filepath, fs.constants.F_OK, (err) => {
-        if (!err) {
-          fs.unlink(filepath, (err) => console.error("Gagal hapus:", err));
-        }
-      });
+      if (splitUrl.length < 2) {
+        console.log("⚠️ URL Cloudinary tidak standar, lewati:", fileUrl);
+        return;
+      }
+
+      // Ambil bagian belakangnya: "v1767727262/edukost_uploads/gambar123.jpg"
+      let publicIdWithExtension = splitUrl[1];
+
+      // 2. Hapus nomor versi ("v12345/") jika ada di depan
+      // Regex ini mencari huruf 'v' diikuti angka, lalu garis miring
+      const versionRegex = /^v\d+\//;
+      if (versionRegex.test(publicIdWithExtension)) {
+        publicIdWithExtension = publicIdWithExtension.replace(versionRegex, '');
+      }
+      // Sekarang sisanya: "edukost_uploads/gambar123.jpg"
+
+      // 3. Hapus ekstensi file (.jpg, .png, dll) dari belakang
+      const parts = publicIdWithExtension.split('.');
+      parts.pop(); // Buang elemen terakhir (ekstensi)
+      const publicId = parts.join('.'); // Gabung lagi (jaga-jaga kalau nama file ada titik lain)
+
+      // Hasil Akhir Public ID: "edukost_uploads/gambar123" (Ini yang benar!)
+
+      // --- EKSEKUSI HAPUS ---
+      // Pastikan pakai cloudinary.uploader (bukan v2 langsung jika importnya beda, tapi codinganmu pakai v2 oke)
+      const result = await cloudinary.v2.uploader.destroy(publicId);
+      
+      console.log(`🗑️ Mencoba hapus ID: ${publicId} -> Hasil: ${result.result}`);
+      
+    } catch (error) {
+      console.error(`❌ Gagal hapus foto (${fileUrl}):`, error.message);
     }
   });
+
+  await Promise.all(deletePromises);
 };
 
 // --- ROUTE API ---
@@ -203,16 +243,28 @@ app.delete('/api/kos/:id', async (req, res) => {
   }
 });
 
-// Route Khusus Upload Banyak Gambar
+// ROUTE UPLOAD GAMBAR (KE CLOUDINARY)
 app.post('/api/upload', upload.array('images', 10), (req, res) => {
   try {
-    // Kembalikan Link Full ke Frontend
-    const fileUrls = req.files.map(file => {
-      return `http://localhost:${port}/uploads/${file.filename}`;
+    // --- DEBUGGING ---
+    // console.log("Files:", req.files); 
+
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ message: "Tidak ada file yang diupload" });
+    }
+
+    // PERBAIKAN DI SINI: Gunakan 'secure_url'
+    const imageUrls = req.files.map(file => file.secure_url || file.url);
+
+    console.log("✅ Sukses! URL Gambar:", imageUrls);
+
+    res.json({
+      message: 'Upload berhasil!',
+      urls: imageUrls // Kirim URL yang benar ke frontend
     });
-    res.json({ urls: fileUrls });
   } catch (error) {
-    res.status(500).json({ message: "Gagal upload gambar" });
+    console.error("❌ Error Upload:", error);
+    res.status(500).json({ message: "Gagal upload gambar", error: error.message });
   }
 });
 

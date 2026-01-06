@@ -1,0 +1,134 @@
+/* =========================================
+   HALAMAN TAMBAH KOS (PREMIUM FORM)
+   ========================================= */
+
+/* Container Utama untuk Form yang Melayang */
+.form-floating-container {
+  position: relative;
+  z-index: 10; /* Di atas header hijau */
+  margin-top: 100px; /* Turun dari atas layar */
+  padding-bottom: 60px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Kartu Putih Form */
+.form-card-premium {
+  background: white;
+  width: 100%;
+  max-width: 800px; /* Lebar ideal form */
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.1); /* Shadow tebal premium */
+  border: 1px solid #f1f5f9;
+}
+
+.form-header {
+  text-align: center;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 20px;
+}
+.form-header h2 { font-size: 28px; color: #1e293b; margin-bottom: 5px; }
+.form-header p { color: #64748b; }
+
+/* Grid Layout untuk Form */
+.form-grid-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2 Kolom */
+  gap: 20px;
+}
+
+/* Judul Bagian (Info, Lokasi, dll) */
+.form-section-title {
+  grid-column: 1 / -1; /* Full width */
+  font-size: 14px;
+  font-weight: bold;
+  color: #0f766e;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+  border-left: 4px solid #0f766e;
+  padding-left: 10px;
+}
+
+.full-width {
+  grid-column: 1 / -1; /* Elemen lebar penuh */
+}
+
+/* Input Styles Modern */
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 8px;
+}
+
+.input-modern {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px; /* Rounded corners */
+  font-size: 14px;
+  transition: all 0.3s;
+  background: #f8fafc;
+}
+
+.input-modern:focus {
+  background: white;
+  border-color: #0f766e;
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+  outline: none;
+}
+
+/* Upload Box Custom */
+.upload-box-modern {
+  border: 2px dashed #cbd5e1;
+  padding: 30px;
+  text-align: center;
+  border-radius: 12px;
+  background: #f1f5f9;
+  cursor: pointer;
+  position: relative;
+  transition: 0.3s;
+}
+.upload-box-modern:hover { border-color: #0f766e; background: #f0fdfa; }
+
+.upload-box-modern input[type="file"] {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Tombol Submit Keren */
+.btn-primary-gradient {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(15, 118, 110, 0.3);
+  transition: 0.3s;
+}
+.btn-primary-gradient:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(15, 118, 110, 0.4);
+}
+.btn-primary-gradient:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive Mobile */
+@media (max-width: 768px) {
+  .form-grid-layout { grid-template-columns: 1fr; } /* Jadi 1 kolom di HP */
+  .form-card-premium { padding: 20px; }
+  .form-floating-container { margin-top: 80px; padding: 0 15px; }
+}

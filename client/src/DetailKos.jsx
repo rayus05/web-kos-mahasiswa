@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Footer from './Footer';
 import { AuthContext } from './AuthContext';
-import './App.css';
+import './css/DetailKos.css';
 
 function DetailKos() {
   const { id } = useParams();
@@ -16,11 +16,13 @@ function DetailKos() {
   useEffect(() => {
     window.scrollTo(0, 0);
 
+    // Ambil data kos lengkap (termasuk info pemilik jika ada populate di backend)
     axios.get(`http://localhost:5000/api/kos/${id}`)
       .then(res => setKos(res.data))
       .catch(err => console.error(err));
   }, [id]);
 
+  // Handle Keyboard Navigation untuk Lightbox
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (!showModal) return;
@@ -35,11 +37,15 @@ function DetailKos() {
 
   if (!kos) return <div className="loading-state">⏳ Sedang memuat data kos...</div>;
 
-  const photos = Array.isArray(kos.foto) ? kos.foto : [kos.foto].filter(Boolean);
+  // Pastikan photos selalu array & filter yang kosong
+  const photos = Array.isArray(kos.foto) ? kos.foto.filter(Boolean) : [kos.foto].filter(Boolean);
+  
   const pesanWA = `Halo, saya lihat info *${kos.nama}* di EduKost. Apakah kamar ini masih tersedia?`;
   const linkWA = `https://wa.me/${kos.kontak}?text=${encodeURIComponent(pesanWA)}`;
-  const mapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(kos.alamat)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
   
+  // URL Maps embed sederhana
+  const mapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(kos.alamat)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+
   // --- LOGIKA SLIDESHOW ---
   const openModal = (index) => {
     setCurrentImageIndex(index);
@@ -57,8 +63,9 @@ function DetailKos() {
   };
 
   const handleChatWA = (e) => {
+    e.preventDefault(); // Matikan link bawaan dulu
+
     if (!user) {
-      e.preventDefault();
       const mauLogin = window.confirm("🔒 Fitur Terkunci!\n\nAnda harus Login terlebih dahulu untuk menghubungi pemilik kos demi keamanan. Mau login sekarang?");
       if (mauLogin) {
         navigate('/login');
@@ -70,17 +77,23 @@ function DetailKos() {
 
   return (
     <div className="main-wrapper" style={{background: '#f5f7fa'}}>
+      {/* Header Background Hijau */}
       <div className="detail-header-bg"></div>
+      
       <div className="container detail-container">
         <div className="detail-main">
-          {/* Gallery */}
+          
+          {/* --- GALLERY SECTION --- */}
           <div className="gallery-wrapper">
             {photos.length > 0 ? (
               <div className="gallery-grid">
+                {/* Foto Utama Besar */}
                 <div className="gallery-main" onClick={() => openModal(0)}>
                   <img src={photos[0]} alt="Main" className="img-cover" />
                   <span className={`tag-badge ${kos.tipe}`}>{kos.tipe}</span>
                 </div>
+                
+                {/* Foto Samping Kecil */}
                 <div className="gallery-side">
                   {photos[1] && <div className="gallery-item" onClick={() => openModal(1)}><img src={photos[1]} className="img-cover" /></div>}
                   {photos[2] && <div className="gallery-item" onClick={() => openModal(2)}><img src={photos[2]} className="img-cover" /></div>}
@@ -93,21 +106,23 @@ function DetailKos() {
                 </div>
               </div>
             ) : (
-              <div className="gallery-empty"><img src="https://via.placeholder.com/800x400" className="img-cover" /></div>
+              <div className="gallery-empty">
+                 <img src="https://via.placeholder.com/800x400?text=Tidak+Ada+Foto" className="img-cover" />
+              </div>
             )}
           </div>
 
-          {/* Judul & Info Dasar */}
+          {/* --- INFO UTAMA --- */}
           <div className="detail-section">
             <h1 className="detail-title">{kos.nama}</h1>
             <p className="detail-address">📍 {kos.alamat}</p>
             <div className="detail-meta">
               <span>📏 Jarak ke kampus: <strong>{kos.jarak}</strong></span>
-              <span>📅 Post: {kos.createdAt ? new Date(kos.createdAt).toLocaleDateString('id-ID') : 'Baru saja'}</span>
+              <span>📅 Diupdate: {kos.createdAt ? new Date(kos.createdAt).toLocaleDateString('id-ID') : 'Baru saja'}</span>
             </div>
           </div>
 
-          {/* Fasilitas */}
+          {/* --- FASILITAS --- */}
           <div className="detail-section">
             <h3>Fasilitas Kos</h3>
             <div className="facilities-grid">
@@ -123,7 +138,7 @@ function DetailKos() {
             </div>
           </div>
 
-          {/* Deskripsi */}
+          {/* --- DESKRIPSI --- */}
           <div className="detail-section">
             <h3>Deskripsi</h3>
             <p className="detail-desc">
@@ -131,7 +146,7 @@ function DetailKos() {
             </p>
           </div>
 
-          {/* Lokasi (Google Maps Embed) */}
+          {/* --- LOKASI MAPS --- */}
           <div className="detail-section">
             <h3>Lokasi Peta</h3>
             <div className="map-frame">
@@ -149,7 +164,7 @@ function DetailKos() {
 
         </div>
 
-        {/* --- STICKY BOOKING CARD --- */}
+        {/* --- SIDEBAR KANAN (BOOKING CARD) --- */}
         <div className="detail-sidebar">
           <div className="booking-card">
             <p className="booking-label">Harga Sewa Mulai</p>
@@ -161,10 +176,12 @@ function DetailKos() {
               <div className="owner-avatar">👤</div>
               <div>
                 <p className="owner-label">Dikelola oleh</p>
-                <p className="owner-name">Pemilik Kos</p>
+                {/* Tampilkan Nama Pemilik jika ada (dari User), kalau tidak ada tampilkan default */}
+                <p className="owner-name">{kos.pemilikId?.nama || 'Admin / Pemilik'}</p>
               </div>
             </div>
 
+            {/* TOMBOL WA PINTAR (Locked/Unlocked) */}
             <a 
               href={linkWA} 
               onClick={handleChatWA} 
@@ -190,15 +207,13 @@ function DetailKos() {
 
       <Footer />
 
-      {/* --- MODAL GALERI FOTO SLIDESHOW --- */}
+      {/* --- MODAL LIGHTBOX (SLIDESHOW) --- */}
       {showModal && (
         <div className="lightbox-overlay" onClick={() => setShowModal(false)}>
           
           <button className="lightbox-btn close-btn" onClick={() => setShowModal(false)}>✖</button>
-
           <button className="lightbox-btn prev-btn" onClick={prevImage}>❮</button>
 
-          {/* Container Gambar */}
           <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
             <img 
               src={photos[currentImageIndex]} 
