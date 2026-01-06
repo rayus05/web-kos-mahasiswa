@@ -26,7 +26,7 @@ function CariKos() {
     try {
       setLoading(true);
       // Filter 'approved' sebaiknya dilakukan di backend, tapi di sini kita filter manual dulu
-      const response = await axios.get('https://edukost.vercel.app/api/kos');
+      const response = await axios.get('https://edukost1.vercel.app/api/kos');
       setKosList(response.data.filter(k => k.status === 'approved')); 
     } catch (error) {
       console.error("Gagal ambil data:", error);

@@ -17,7 +17,7 @@ function DetailKos() {
     window.scrollTo(0, 0);
 
     // Ambil data kos lengkap (termasuk info pemilik jika ada populate di backend)
-    axios.get(`https://edukost.vercel.app/api/kos/${id}`)
+    axios.get(`https://edukost1.vercel.app/api/kos/${id}`)
       .then(res => setKos(res.data))
       .catch(err => console.error(err));
   }, [id]);

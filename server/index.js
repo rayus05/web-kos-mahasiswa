@@ -30,7 +30,15 @@ cloudinary.v2.config({
 });
 
 // --- Middleware (Satpam/Perantara) ---
-app.use(cors());              // Bolehkan akses dari luar
+app.use(cors({
+  origin: [
+    "https://web-kos-mahasiswa-gp26.vercel.app", // URL Frontend Vercel Kamu (Sesuai Log Error)
+    "http://localhost:5173" // Biar di laptop tetap jalan
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));              // Bolehkan akses dari luar
+
 app.use(express.json());      // Agar server bisa baca data format JSON
 app.use(express.urlencoded({ extended: true }));
 

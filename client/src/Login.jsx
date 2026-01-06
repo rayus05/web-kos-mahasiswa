@@ -15,7 +15,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('https://edukost.vercel.app/api/auth/login', { email, password });
+      const res = await axios.post('https://edukost1.vercel.app/api/auth/login', { email, password });
       login(res.data.user, res.data.token);
       if (res.data.user.role === 'admin') {
         alert("Selamat datang, Bos Admin! 🫡");
