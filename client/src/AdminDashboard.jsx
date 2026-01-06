@@ -2,12 +2,13 @@ import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
-import './App.css';
+import './css/AdminDashboard.css';
 
 function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [stats, setStats] = useState({ totalKos: 0, totalUser: 0 });
   const [kosList, setKosList] = useState([]);
+  const [selectedVerifyKos, setSelectedVerifyKos] = useState(null);
   const [editId, setEditId] = useState(null);
   const [imageFiles, setImageFiles] = useState([]);
   const [formData, setFormData] = useState({
@@ -80,10 +81,13 @@ function AdminDashboard() {
   };
 
   const handleVerify = async (id, statusBaru) => {
+    if(!window.confirm(`Yakin ingin ${statusBaru === 'approved' ? 'Menerima' : 'Menolak'} iklan ini?`)) return;
+
     try {
       await axios.put(`http://localhost:5000/api/kos/${id}/verify`, { status: statusBaru });
-      alert(`Kos berhasil di-${statusBaru}!`);
-      fetchKos(); // Refresh tabel
+      alert(`Sukses! Iklan telah di-${statusBaru}.`);
+      setSelectedVerifyKos(null); // Tutup modal
+      fetchData(); // Refresh data
     } catch (error) {
       alert("Gagal update status.");
     }
@@ -201,7 +205,7 @@ function AdminDashboard() {
         {activeTab === 'dashboard' && (
           <div className="dashboard-stats">
             <h1>Selamat Datang, Admin! 👋</h1>
-            <p>Berikut adalah ringkasan data ZonaKampus hari ini.</p>
+            <p>Berikut adalah ringkasan data EduKost hari ini.</p>
             
             <div className="stats-grid">
               <div className="stat-card blue">
@@ -419,7 +423,7 @@ function AdminDashboard() {
             ) : (
               <div className="grid-verifikasi">
                 {kosList.filter(k => k.status === 'pending').map(kos => (
-                  <div key={kos._id} className="card-verify">
+                  <div key={kos._id} className="card-verify clickable" onClick={() => setSelectedVerifyKos(kos)}>
                     
                     {/* Gambar Thumbnail */}
                     <div className="verify-img-wrapper">
@@ -433,29 +437,10 @@ function AdminDashboard() {
                     <div className="verify-body">
                       <h4>{kos.nama}</h4>
                       <p className="verify-owner">
-                        👤 Oleh: <strong>{kos.pemilikId ? kos.pemilikId.nama : 'Admin'}</strong>
+                        👤 Oleh: <strong>{kos.pemilikId ? kos.pemilikId.username : 'Admin'}</strong>
                       </p>
                       <p className="verify-price">Rp {kos.harga.toLocaleString()}</p>
                       
-                      <div className="verify-details">
-                         <small>📍 {kos.alamat}</small>
-                         <small>📝 {kos.deskripsi ? kos.deskripsi.substring(0, 50) + '...' : '-'}</small>
-                      </div>
-
-                      <div className="verify-actions">
-                        <button 
-                          onClick={() => handleVerify(kos._id, 'approved')} 
-                          className="btn-approve"
-                        >
-                          ✅ Terima
-                        </button>
-                        <button 
-                          onClick={() => handleVerify(kos._id, 'rejected')} 
-                          className="btn-reject"
-                        >
-                          ❌ Tolak
-                        </button>
-                      </div>
                     </div>
                   </div>
                 ))}
@@ -464,6 +449,70 @@ function AdminDashboard() {
           </div>
         )}
       </div>
+
+      {/* === MODAL POPUP VERIFIKASI === */}
+      {selectedVerifyKos && (
+        <div className="modal-overlay" onClick={() => setSelectedVerifyKos(null)}>
+          <div className="verify-modal-content" onClick={(e) => e.stopPropagation()}>
+            
+            <div className="verify-modal-header">
+              <h3>Review Iklan Kos</h3>
+              <button className="close-btn-text" onClick={() => setSelectedVerifyKos(null)}>✖ Tutup</button>
+            </div>
+
+            <div className="verify-modal-body">
+              {/* Kolom Kiri: Gambar */}
+              <div className="vm-left">
+                <img src={selectedVerifyKos.foto[0]} alt="Main" className="vm-main-img" />
+                <div className="vm-gallery">
+                  {selectedVerifyKos.foto.slice(1).map((f, i) => (
+                    <img key={i} src={f} alt="thumb" className="vm-thumb" />
+                  ))}
+                  
+                </div>
+              </div>
+
+              {/* Kolom Kanan: Detail Data */}
+              <div className="vm-right">
+                <h2>{selectedVerifyKos.nama}</h2>
+                <h3 className="vm-price">Rp {selectedVerifyKos.harga.toLocaleString()} <small>/ bulan</small></h3>
+                
+                <div className="vm-info-grid">
+                   <div><strong>Pemilik:</strong><br/>{selectedVerifyKos.pemilikId?.nama || 'Admin'}</div>
+                   <div><strong>Kontak:</strong><br/>{selectedVerifyKos.kontak}</div>
+                   <div><strong>Jarak:</strong><br/>{selectedVerifyKos.jarak}</div>
+                   <div><strong>Tipe:</strong><br/>{selectedVerifyKos.tipe}</div>
+                   <div style={{gridColumn:'1/-1'}}><strong>Alamat:</strong><br/>{selectedVerifyKos.alamat}</div>
+                </div>
+
+                <div className="vm-desc-box">
+                  <strong>Fasilitas:</strong> {selectedVerifyKos.fasilitas.toString()}
+                  <br/><br/>
+                  <strong>Deskripsi:</strong><br/>
+                  {selectedVerifyKos.deskripsi}
+                </div>
+              </div>
+            </div>
+
+            {/* Footer: Tombol Eksekusi */}
+            <div className="verify-modal-footer">
+               <button 
+                 className="btn-reject-big"
+                 onClick={() => handleVerify(selectedVerifyKos._id, 'rejected')}
+               >
+                 🚫 Tolak Iklan
+               </button>
+               <button 
+                 className="btn-approve-big"
+                 onClick={() => handleVerify(selectedVerifyKos._id, 'approved')}
+               >
+                 ✅ Setujui & Tayangkan
+               </button>
+            </div>
+
+          </div>
+        </div>
+      )}
     </div>
   );
 }

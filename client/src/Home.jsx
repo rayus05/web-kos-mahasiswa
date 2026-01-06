@@ -3,6 +3,7 @@ import axios from "axios";
 import "./App.css";
 import { Link, useNavigate } from 'react-router-dom';
 import Footer from './Footer';
+import Register from "./Register";
 
 function Home() {
   const [kosList, setKosList] = useState([]);
@@ -40,6 +41,10 @@ function Home() {
         current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
       }
     }
+  };
+
+  const handleTo = () => {
+    navigate('./register');
   };
 
   const rekomendasiKos = kosList.slice(0, 10);
@@ -128,7 +133,7 @@ function Home() {
         <div className="cta-content">
           <h2>Punya Kos Kosong?</h2>
           <p>Daftarkan kosmu sekarang dan temukan penyewa mahasiswa dengan cepat!</p>
-          <button className="btn-cta">Daftar Jadi Mitra 🚀</button>
+          <button className="btn-cta" onClick={handleTo}>Daftar Jadi Mitra 🚀</button>
         </div>
         <div className="cta-image">
             🏡

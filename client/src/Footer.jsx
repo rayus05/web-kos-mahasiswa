@@ -22,21 +22,14 @@ function Footer() {
           <ul>
             <li><a href="/">Beranda</a></li>
             <li><a href="/cari">Cari Kos</a></li>
-            <li><a href="#">Tentang Kami</a></li>
-            <li><a href="#">Pusat Bantuan</a></li>
           </ul>
         </div>
 
         {/* Kolom 3: Kontak */}
         <div className="footer-section">
           <h3>Hubungi Kami</h3>
-          <p>📍 Jl. Kampus Merdeka No. 45</p>
-          <p>📞 +62 812-3456-7890</p>
-          <p>📧 support@EduKost.com</p>
-          
-          <div className="social-icons">
-            <span>📷</span> <span>🐦</span> <span>📘</span>
-          </div>
+          <p>📍 Jl. Banten 2 </p>
+          <p>📞 +62 852-6395-9549 </p>
         </div>
 
       </div>
