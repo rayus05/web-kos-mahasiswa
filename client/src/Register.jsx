@@ -18,7 +18,7 @@ function Register() {
     e.preventDefault();
     setError('');
     try {
-      await axios.post('http://localhost:5000/api/auth/register', formData);
+      await axios.post('https://edukost.vercel.app/api/auth/register', formData);
       alert("🎉 Pendaftaran Berhasil! Silakan Login dengan akun barumu.");
       navigate('/login');
     } catch (err) {

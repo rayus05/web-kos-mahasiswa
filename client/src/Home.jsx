@@ -22,7 +22,7 @@ function Home() {
   const ambilDataKos = async () => {
     try {
       // Endpoint ini sebaiknya sudah difilter di backend (status: approved)
-      const response = await axios.get("http://localhost:5000/api/kos");
+      const response = await axios.get("https://edukost.vercel.app/api/kos");
       setKosList(response.data);
     } catch (error) {
       console.error("Gagal mengambil data kos:", error);
@@ -66,7 +66,7 @@ const getFotoSrc = (foto) => {
   } 
   
   // Jika foto cuma nama file (Lokal), tambahkan localhost
-  return `http://localhost:5000/uploads/${foto}`;
+  return `https://edukost.vercel.app/uploads/${foto}`;
 };
 
   // Ambil 10 data pertama untuk rekomendasi

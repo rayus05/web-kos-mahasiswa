@@ -43,7 +43,7 @@ function AdminDashboard() {
 
   const fetchStats = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/stats');
+      const res = await axios.get('https://edukost.vercel.app/api/stats');
       setStats(res.data);
     } catch (err) { console.error("Gagal ambil stats"); }
   };
@@ -51,7 +51,7 @@ function AdminDashboard() {
   // FUNGSI AMBIL DATA USER
   const fetchUsers = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/users');
+      const res = await axios.get('https://edukost.vercel.app/api/users');
       setUserList(res.data);
     } catch (error) {
       console.error("Gagal ambil user:", error);
@@ -62,7 +62,7 @@ function AdminDashboard() {
   const handleDeleteUser = async (id, usernameUser) => {
     if (window.confirm(`Yakin ingin memblokir/menghapus user "${usernameUser}"?`)) {
       try {
-        await axios.delete(`http://localhost:5000/api/users/${id}`);
+        await axios.delete(`https://edukost.vercel.app/api/users/${id}`);
         alert("User berhasil dihapus!");
         fetchUsers();
         fetchStats();
@@ -74,7 +74,7 @@ function AdminDashboard() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/admin/kos');
+      const response = await axios.get('https://edukost.vercel.app/api/admin/kos');
       setKosList(response.data);
     } catch (error) {
       console.error("Error ambil data:", error);
@@ -85,7 +85,7 @@ function AdminDashboard() {
     if(!window.confirm(`Yakin ingin ${statusBaru === 'approved' ? 'Menerima' : 'Menolak'} iklan ini?`)) return;
 
     try {
-      await axios.put(`http://localhost:5000/api/kos/${id}/verify`, { status: statusBaru });
+      await axios.put(`https://edukost.vercel.app/api/kos/${id}/verify`, { status: statusBaru });
       alert(`Sukses! Iklan telah di-${statusBaru}.`);
       setSelectedVerifyKos(null); // Tutup modal
       fetchData(); // Refresh data
@@ -114,7 +114,7 @@ function AdminDashboard() {
           uploadData.append('images', imageFiles[i]); // Kuncinya wajib 'images'
         }
 
-        const uploadRes = await axios.post('http://localhost:5000/api/upload', uploadData);
+        const uploadRes = await axios.post('https://edukost.vercel.app/api/upload', uploadData);
         
         // Ambil URL dari respon backend
         const newUrls = uploadRes.data.urls; 
@@ -136,11 +136,11 @@ function AdminDashboard() {
       // --- LANGKAH 3: PILIH UPDATE ATAU CREATE ---
       if (editId) {
         // Mode Edit (PUT)
-        await axios.put(`http://localhost:5000/api/kos/${editId}`, payload);
+        await axios.put(`https://edukost.vercel.app/api/kos/${editId}`, payload);
         alert("✅ Data kos berhasil diperbarui!");
       } else {
         // Mode Tambah Baru (POST)
-        await axios.post('http://localhost:5000/api/kos', payload);
+        await axios.post('https://edukost.vercel.app/api/kos', payload);
         alert("✅ Data kos baru berhasil disimpan!");
       }
 
@@ -166,7 +166,7 @@ function AdminDashboard() {
   const handleDelete = async (id, nama) => {
     if (window.confirm(`Yakin hapus "${nama}"?`)) {
       try {
-        await axios.delete(`http://localhost:5000/api/kos/${id}`);
+        await axios.delete(`https://edukost.vercel.app/api/kos/${id}`);
         fetchData();
       } catch (error) {
         alert("Gagal menghapus.");
