@@ -346,3 +346,5 @@ app.put('/api/kos/:id/verify', async (req, res) => {
     res.json(updatedKos);
   } catch (error) { res.status(400).json({ message: error.message }); }
 });
+
+module.exports = app;
