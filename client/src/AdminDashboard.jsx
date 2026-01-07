@@ -136,11 +136,11 @@ function AdminDashboard() {
       // --- LANGKAH 3: PILIH UPDATE ATAU CREATE ---
       if (editId) {
         // Mode Edit (PUT)
-        await axios.put(`https://edukost1.vercel1.app/api/kos/${editId}`, payload);
+        await axios.put(`https://edukost1.vercel.app/api/kos/${editId}`, payload);
         alert("✅ Data kos berhasil diperbarui!");
       } else {
         // Mode Tambah Baru (POST)
-        await axios.post('https://edukost1.vercel1.app/api/kos', payload);
+        await axios.post('https://edukost1.vercel.app/api/kos', payload);
         alert("✅ Data kos baru berhasil disimpan!");
       }
 
