@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const User = require('./models/User'); // Pastikan path ini benar
+const User = require('./models/User');
 require('dotenv').config();
 
 // Ganti URI ini sesuai dengan yang di .env kamu atau hardcode sementara

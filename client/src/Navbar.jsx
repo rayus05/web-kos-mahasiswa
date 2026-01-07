@@ -38,11 +38,11 @@ function Navbar() {
             {user && user.username === 'superadmin123' ? (
               // Jika Admin -> Ke Dashboard
               <Link to="/admin" className="btn-plus-kos">
-                ⚙️ Dashboard Admin
+                ⚙️ Dashboard
               </Link>
             ) : (
               // Jika User Biasa/Guest -> Pasang Iklan
-              <Link to="/tambah-kos" className="btn-plus-kos" style={{textDecoration:'none'}}>
+              <Link to="/tambah-kos" className="btn-plus-kos">
                 <span>➕</span> Iklan Kos
               </Link>
             )}
@@ -50,7 +50,7 @@ function Navbar() {
             {user ? (
               <div className="user-menu">
                 <span className="user-greeting">Halo, <strong>{user.username.split(' ')[0]}</strong></span>
-                <button onClick={() => setShowLogout(true)} className="btn-logout">
+                <button onClick={() => setShowLogout(true)} className="btn-logout-nav">
                   Logout ➜
                 </button>
               </div>
