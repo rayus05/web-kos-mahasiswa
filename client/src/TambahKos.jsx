@@ -39,7 +39,7 @@ function TambahKos() {
           uploadData.append('images', imageFiles[i]); // Key wajib 'images'
         }
         
-        const uploadRes = await axios.post('https://edukost.vercel.app/api/upload', uploadData);
+        const uploadRes = await axios.post('https://edukost1.vercel.app/api/upload', uploadData);
         finalFotoUrls = uploadRes.data.urls;
       } else {
         alert("Wajib upload minimal 1 foto!");
@@ -55,7 +55,7 @@ function TambahKos() {
       };
 
       console.log("2. Menyimpan data...", payload);
-      await axios.post('https://edukost.vercel.app/api/kos', payload);
+      await axios.post('https://edukost1.vercel.app/api/kos', payload);
 
       alert("🎉 Iklan Berhasil Dikirim! Menunggu verifikasi admin.");
       navigate('/'); 
