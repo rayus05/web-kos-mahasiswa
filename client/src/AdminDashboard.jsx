@@ -87,8 +87,8 @@ function AdminDashboard() {
     try {
       await axios.put(`https://edukost1.vercel.app/api/kos/${id}/verify`, { status: statusBaru });
       alert(`Sukses! Iklan telah di-${statusBaru}.`);
-      setSelectedVerifyKos(null); // Tutup modal
-      fetchData(); // Refresh data
+      setSelectedVerifyKos(null);
+      fetchData();
     } catch (error) {
       alert("Gagal update status.");
     }
@@ -103,7 +103,7 @@ function AdminDashboard() {
     setLoading(true);
 
     try {
-      let finalFotoUrls = formData.foto || []; // Pakai foto lama kalau tidak upload baru
+      let finalFotoUrls = formData.foto || [];
 
       // --- LANGKAH 1: UPLOAD FOTO KE CLOUDINARY (Jika ada file dipilih) ---
       if (imageFiles.length > 0) {
@@ -120,26 +120,24 @@ function AdminDashboard() {
         const newUrls = uploadRes.data.urls; 
         
         if (newUrls && newUrls.length > 0) {
-           finalFotoUrls = newUrls; // Pakai URL baru dari Cloudinary
+           finalFotoUrls = newUrls;
         }
       }
 
       // --- LANGKAH 2: SIAPKAN DATA UNTUK DISIMPAN ---
       const payload = {
         ...formData,
-        foto: finalFotoUrls, // Masukkan array URL foto (bukan file fisik)
-        userId: user.id      // PENTING: Masukkan ID Admin sebagai pemilik
+        foto: finalFotoUrls,
+        userId: user.id
       };
 
       console.log("2. Mengirim data ke Database:", payload);
 
       // --- LANGKAH 3: PILIH UPDATE ATAU CREATE ---
       if (editId) {
-        // Mode Edit (PUT)
         await axios.put(`https://edukost1.vercel.app/api/kos/${editId}`, payload);
         alert("✅ Data kos berhasil diperbarui!");
       } else {
-        // Mode Tambah Baru (POST)
         await axios.post('https://edukost1.vercel.app/api/kos', payload);
         alert("✅ Data kos baru berhasil disimpan!");
       }
@@ -152,7 +150,7 @@ function AdminDashboard() {
       setImageFiles([]);
       setEditId(null);
       
-      fetchData(); // Ambil data terbaru biar tabel langsung update
+      fetchData();
 
     } catch (err) {
       console.error("Gagal menyimpan:", err);
@@ -306,7 +304,7 @@ function AdminDashboard() {
                 <input 
                   type="file" 
                   accept="image/*"
-                  multiple // <--- PENTING!
+                  multiple
                   onChange={(e) => setImageFiles(e.target.files)}
                   style={{marginBottom: '10px'}}
                 />
@@ -394,12 +392,10 @@ function AdminDashboard() {
                       <td>{index + 1}</td>
                       <td>
                         <div style={{fontWeight: 'bold'}}>{u.username}</div>
-                        {/* Tandai kalau ini akun sendiri */}
                         {u.email === user.email && <small style={{color:'#0f766e'}}>(Akun Saya)</small>}
                       </td>
                       <td>{u.email}</td>
                       <td>
-                        {/* Badge Role */}
                         <span className={`role-badge ${u.role}`}>
                           {u.role.toUpperCase()}
                         </span>
@@ -443,8 +439,6 @@ function AdminDashboard() {
               <div className="grid-verifikasi">
                 {kosList.filter(k => k.status === 'pending').map(kos => (
                   <div key={kos._id} className="card-verify clickable" onClick={() => setSelectedVerifyKos(kos)}>
-                    
-                    {/* Gambar Thumbnail */}
                     <div className="verify-img-wrapper">
                        <img 
                          src={kos.foto && kos.foto[0] ? kos.foto[0] : "https://via.placeholder.com/300"} 
@@ -459,7 +453,6 @@ function AdminDashboard() {
                         👤 Oleh: <strong>{kos.pemilikId ? kos.pemilikId.username : 'Admin'}</strong>
                       </p>
                       <p className="verify-price">Rp {kos.harga.toLocaleString()}</p>
-                      
                     </div>
                   </div>
                 ))}

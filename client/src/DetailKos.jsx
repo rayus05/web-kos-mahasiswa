@@ -15,8 +15,6 @@ function DetailKos() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
-    // Ambil data kos lengkap (termasuk info pemilik jika ada populate di backend)
     axios.get(`https://edukost1.vercel.app/api/kos/${id}`)
       .then(res => setKos(res.data))
       .catch(err => console.error(err));
@@ -37,13 +35,10 @@ function DetailKos() {
 
   if (!kos) return <div className="loading-state">⏳ Sedang memuat data kos...</div>;
 
-  // Pastikan photos selalu array & filter yang kosong
   const photos = Array.isArray(kos.foto) ? kos.foto.filter(Boolean) : [kos.foto].filter(Boolean);
   
   const pesanWA = `Halo, saya lihat info *${kos.nama}* di EduKost. Apakah kamar ini masih tersedia?`;
   const linkWA = `https://wa.me/${kos.kontak}?text=${encodeURIComponent(pesanWA)}`;
-  
-  // URL Maps embed sederhana
   const mapUrl = `https://maps.google.com/maps?q=${encodeURIComponent(kos.alamat)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
 
   // --- LOGIKA SLIDESHOW ---
@@ -63,7 +58,7 @@ function DetailKos() {
   };
 
   const handleChatWA = (e) => {
-    e.preventDefault(); // Matikan link bawaan dulu
+    e.preventDefault();
 
     if (!user) {
       const mauLogin = window.confirm("🔒 Fitur Terkunci!\n\nAnda harus Login terlebih dahulu untuk menghubungi pemilik kos demi keamanan. Mau login sekarang?");
@@ -77,12 +72,10 @@ function DetailKos() {
 
   return (
     <div className="main-wrapper" style={{background: '#f5f7fa'}}>
-      {/* Header Background Hijau */}
       <div className="detail-header-bg"></div>
       
       <div className="container detail-container">
         <div className="detail-main">
-          
           {/* --- GALLERY SECTION --- */}
           <div className="gallery-wrapper">
             {photos.length > 0 ? (
@@ -177,7 +170,7 @@ function DetailKos() {
               <div>
                 <p className="owner-label">Dikelola oleh</p>
                 {/* Tampilkan Nama Pemilik jika ada (dari User), kalau tidak ada tampilkan default */}
-                <p className="owner-name">{kos.pemilikId?.nama || 'Admin / Pemilik'}</p>
+                <p className="owner-name">{kos.pemilikId?.username || 'Admin / Pemilik'}</p>
               </div>
             </div>
 
@@ -210,7 +203,6 @@ function DetailKos() {
       {/* --- MODAL LIGHTBOX (SLIDESHOW) --- */}
       {showModal && (
         <div className="lightbox-overlay" onClick={() => setShowModal(false)}>
-          
           <button className="lightbox-btn close-btn" onClick={() => setShowModal(false)}>✖</button>
           <button className="lightbox-btn prev-btn" onClick={prevImage}>❮</button>
 

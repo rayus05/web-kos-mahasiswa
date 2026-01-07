@@ -50,15 +50,15 @@ function Home() {
   // Logika Tombol CTA (Call to Action)
   const handleMitraClick = () => {
     if (user) {
-      navigate('/tambah-kos'); // Kalau sudah login, langsung pasang iklan
+      navigate('/tambah-kos');
     } else {
-      navigate('/register'); // Kalau belum, daftar dulu
+      navigate('/register');
     }
   };
 
   // Logika untuk menampilkan gambar (bisa Cloudinary atau Lokal)
 const getFotoSrc = (foto) => {
-  if (!foto) return "https://via.placeholder.com/300"; // Placeholder
+  if (!foto) return "https://via.placeholder.com/300";
   
   // Jika foto adalah URL lengkap (Cloudinary), pakai langsung
   if (foto.startsWith('http')) {

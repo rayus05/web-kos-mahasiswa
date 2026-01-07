@@ -7,9 +7,8 @@ import './css/CariKos.css';
 function CariKos() {
   const [kosList, setKosList] = useState([]);
   const [loading, setLoading] = useState(true);
-  
   const location = useLocation();
-  const navigate = useNavigate(); // ✅ Perbaikan: Tambah ini
+  const navigate = useNavigate();
   
   const queryParams = new URLSearchParams(location.search);
   const initialKeyword = queryParams.get('keyword') || '';
@@ -25,7 +24,6 @@ function CariKos() {
   const ambilDataKos = async () => {
     try {
       setLoading(true);
-      // Filter 'approved' sebaiknya dilakukan di backend, tapi di sini kita filter manual dulu
       const response = await axios.get('https://edukost1.vercel.app/api/kos');
       setKosList(response.data.filter(k => k.status === 'approved')); 
     } catch (error) {
@@ -36,11 +34,9 @@ function CariKos() {
   };
 
   const handleSearch = () => {
-    // ✅ Perbaikan: Ganti 'kategori' jadi 'tipe'
     navigate(`/cari?keyword=${keyword}&tipe=${tipe}`);
   };
 
-  // Filter Lokal (Client Side)
   const filteredKos = kosList.filter((kos) => {
     const matchKeyword = kos.nama.toLowerCase().includes(keyword.toLowerCase()) || 
                          kos.alamat.toLowerCase().includes(keyword.toLowerCase());
@@ -126,7 +122,6 @@ function CariKos() {
                 </div>
               ))
             ) : (
-              // Empty State
               <div className="empty-state-search">
                 <div className="empty-icon">😢</div>
                 <h3>Yah, kos tidak ditemukan</h3>

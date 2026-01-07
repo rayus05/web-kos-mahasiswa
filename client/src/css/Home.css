@@ -14,7 +14,7 @@
   justify-content: center;
   text-align: center;
   color: white;
-  margin-top: -80px; /* Tarik ke atas biar masuk di belakang navbar transparan */
+  margin-top: -80px;
   padding-top: 80px;
 }
 
@@ -54,7 +54,7 @@
   align-items: center;
   gap: 10px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  flex-wrap: wrap; /* Biar aman di HP */
+  flex-wrap: wrap;
 }
 
 .input-group-hero {
@@ -90,7 +90,7 @@
 }
 
 .btn-search-hero {
-  background: #f97316; /* Orange */
+  background: #f97316;
   color: white;
   border: none;
   padding: 12px 30px;
@@ -132,11 +132,11 @@
   gap: 20px;
   overflow-x: auto;
   scroll-behavior: smooth;
-  padding: 10px 5px; /* Kasih padding biar shadow gak kepotong */
-  -ms-overflow-style: none;  /* Hide scrollbar IE/Edge */
-  scrollbar-width: none;  /* Hide scrollbar Firefox */
+  padding: 10px 5px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
-.kos-slider::-webkit-scrollbar { display: none; } /* Hide scrollbar Chrome */
+.kos-slider::-webkit-scrollbar { display: none; }
 
 .slider-item {
   min-width: 280px;

@@ -55,7 +55,7 @@ function Login() {
         {/* --- SISI KANAN (FORMULIR) --- */}
         <div className="login-right">
           <div className="form-content">
-            <div className="mobile-brand-only">EduKost🎓</div> {/* Muncul cuma di HP */}
+            <div className="mobile-brand-only">EduKost🎓</div>
             
             <h2 className="login-heading">Sign In</h2>
             <p className="login-subheading">Masuk untuk melanjutkan pencarian kos.</p>

@@ -5,7 +5,7 @@
 /* --- 1. LAYOUT UTAMA --- */
 .detail-header-bg {
   height: 250px;
-  background: linear-gradient(135deg, #0f766e 0%, #115e59 100%); /* Teal Gradient */
+  background: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
   position: absolute;
   top: 0;
   left: 0;
@@ -17,9 +17,9 @@
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: 1fr 350px; /* Kiri (Konten) 1fr, Kanan (Sidebar) 350px */
+  grid-template-columns: 1fr 350px;
   gap: 40px;
-  margin-top: 40px; /* Turun dikit biar masuk area header hijau */
+  margin-top: 40px;
   margin-bottom: 60px;
   align-items: start;
 }
@@ -40,7 +40,7 @@
 
 .gallery-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr; /* Kiri Besar, Kanan Kecil */
+  grid-template-columns: 2fr 1fr;
   gap: 10px;
   height: 400px;
 }
@@ -53,7 +53,7 @@
 
 .gallery-side {
   display: grid;
-  grid-template-rows: 1fr 1fr; /* 2 Baris di kanan */
+  grid-template-rows: 1fr 1fr;
   gap: 10px;
   height: 100%;
 }
@@ -75,7 +75,7 @@
 
 .gallery-main:hover .img-cover,
 .gallery-item:hover .img-cover {
-  transform: scale(1.05); /* Efek Zoom saat hover */
+  transform: scale(1.05);
 }
 
 /* Badge Tipe Kos di Foto Utama */
@@ -156,7 +156,7 @@
   line-height: 1.8;
   color: #475569;
   font-size: 15px;
-  white-space: pre-line; /* Agar enter/paragraf terbaca */
+  white-space: pre-line;
 }
 
 /* --- 4. FASILITAS (TAGS STYLE) --- */
@@ -167,7 +167,7 @@
 }
 
 .facility-item {
-  background: #f0fdfa; /* Hijau muda pudar */
+  background: #f0fdfa;
   color: #0f766e;
   padding: 8px 16px;
   border-radius: 50px;
@@ -182,14 +182,14 @@
 /* --- 5. SIDEBAR BOOKING (STICKY) --- */
 .detail-sidebar {
   position: sticky;
-  top: 100px; /* Jarak dari atas saat discroll */
+  top: 100px;
 }
 
 .booking-card {
   background: white;
   padding: 25px;
   border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.1); /* Shadow tebal biar melayang */
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
   border: 1px solid #e2e8f0;
 }
 
@@ -234,7 +234,7 @@
   gap: 10px;
   width: 100%;
   padding: 14px;
-  background: #25D366; /* Warna WA */
+  background: #25D366;
   color: white;
   text-decoration: none;
   font-weight: bold;
@@ -249,9 +249,9 @@
 }
 
 .btn-chat-wa.locked {
-  background: #cbd5e1; /* Abu-abu kalau terkunci */
+  background: #cbd5e1;
   color: #64748b;
-  cursor: pointer; /* Tetap pointer biar user tau bisa diklik buat login */
+  cursor: pointer;
   box-shadow: none;
 }
 .btn-chat-wa.locked:hover { background: #94a3b8; color: white; }
@@ -319,22 +319,22 @@
 /* --- RESPONSIVE MOBILE --- */
 @media (max-width: 900px) {
   .detail-container {
-    grid-template-columns: 1fr; /* Jadi 1 kolom */
+    grid-template-columns: 1fr;
     margin-top: 20px;
   }
   
   .detail-sidebar {
-    position: static; /* Gak sticky lagi di HP */
-    order: -1; /* Taruh Booking Card DI ATAS konten (biar user langsung liat harga) */
+    position: static;
+    order: -1;
     margin-bottom: 20px;
   }
   
   .gallery-grid {
-    height: 250px; /* Gambar lebih pendek di HP */
+    height: 250px;
   }
 
   .detail-meta {
-    flex-direction: column; /* Jarak & Tanggal jadi susun bawah */
+    flex-direction: column;
     gap: 10px;
   }
 }

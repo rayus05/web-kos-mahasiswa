@@ -36,7 +36,7 @@ function TambahKos() {
         console.log("1. Mengupload foto...");
         const uploadData = new FormData();
         for (let i = 0; i < imageFiles.length; i++) {
-          uploadData.append('images', imageFiles[i]); // Key wajib 'images'
+          uploadData.append('images', imageFiles[i]);
         }
         
         const uploadRes = await axios.post('https://edukost1.vercel.app/api/upload', uploadData);
@@ -69,13 +69,8 @@ function TambahKos() {
 
   return (
     <div className="main-wrapper" style={{background: '#f5f7fa', minHeight: '100vh'}}>
-      
-      {/* --- HEADER BACKGROUND HIJAU --- */}
       <div className="detail-header-bg"></div>
-
-      {/* --- CONTAINER FORM MELAYANG --- */}
       <div className="container form-floating-container">
-        
         <div className="form-card-premium">
           <div className="form-header">
             <h2>🏡 Pasang Iklan Kos</h2>
@@ -165,7 +160,6 @@ function TambahKos() {
                  {loading ? '⏳ Mengirim...' : 'Kirim Iklan Sekarang 🚀'}
                </button>
              </div>
-
           </form>
         </div>
       </div>

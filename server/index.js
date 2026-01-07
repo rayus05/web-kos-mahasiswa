@@ -32,14 +32,14 @@ cloudinary.v2.config({
 // --- Middleware (Satpam/Perantara) ---
 app.use(cors({
   origin: [
-    "https://edukost.vercel.app", // URL Frontend Vercel Kamu (Sesuai Log Error)
-    "http://localhost:5173" // Biar di laptop tetap jalan
+    "https://edukost.vercel.app",
+    "http://localhost:5173"
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
-}));              // Bolehkan akses dari luar
+}));
 
-app.use(express.json());      // Agar server bisa baca data format JSON
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // --- Koneksi ke Database MongoDB ---
@@ -54,8 +54,8 @@ mongoose.connect(uri)
 
 // --- Setup Rate Limiter ---
 const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 menit
-  max: 5, // Batasi tiap IP maksimal 100 request per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 5,
   message: "Terlalu banyak permintaan daftar/login dari IP ini, silakan coba lagi nanti."
 });
 
@@ -80,7 +80,6 @@ const hapusFotoLama = async (fotoArray) => {
 
       // --- LOGIKA BARU: EKSTRAK PUBLIC ID YANG LEBIH AMAN ---
       // 1. Kita potong URL berdasarkan kata kunci "upload/"
-      // Contoh URL: https://res.cloudinary.com/.../image/upload/v1767727262/edukost_uploads/gambar123.jpg
       const splitUrl = fileUrl.split('upload/');
       
       if (splitUrl.length < 2) {
@@ -88,7 +87,6 @@ const hapusFotoLama = async (fotoArray) => {
         return;
       }
 
-      // Ambil bagian belakangnya: "v1767727262/edukost_uploads/gambar123.jpg"
       let publicIdWithExtension = splitUrl[1];
 
       // 2. Hapus nomor versi ("v12345/") jika ada di depan
@@ -102,12 +100,8 @@ const hapusFotoLama = async (fotoArray) => {
       // 3. Hapus ekstensi file (.jpg, .png, dll) dari belakang
       const parts = publicIdWithExtension.split('.');
       parts.pop(); // Buang elemen terakhir (ekstensi)
-      const publicId = parts.join('.'); // Gabung lagi (jaga-jaga kalau nama file ada titik lain)
+      const publicId = parts.join('.');
 
-      // Hasil Akhir Public ID: "edukost_uploads/gambar123" (Ini yang benar!)
-
-      // --- EKSEKUSI HAPUS ---
-      // Pastikan pakai cloudinary.uploader (bukan v2 langsung jika importnya beda, tapi codinganmu pakai v2 oke)
       const result = await cloudinary.v2.uploader.destroy(publicId);
       
       console.log(`🗑️ Mencoba hapus ID: ${publicId} -> Hasil: ${result.result}`);
@@ -177,9 +171,6 @@ app.post('/api/auth/login', authLimiter, async (req, res) => {
   // --- ROUTE GET PUBLIC (Cuma tampilkan yang disetujui) ---
 app.get('/api/kos', async (req, res) => {
   try {
-    // Filter status: 'approved'
-    // Kalau Admin yang minta (lewat dashboard), mungkin butuh semua.
-    // Tapi untuk simpelnya, API ini kita khususkan buat Public Home Page.
     const kos = await Kos.find({ status: 'approved' }); 
     res.json(kos);
   } catch (error) { res.status(500).json({ message: error.message }); }
@@ -221,9 +212,6 @@ app.put('/api/kos/:id', async (req, res) => {
     // Cari data lama di database dulu
     const kosLama = await Kos.findById(id);
     if (!kosLama) return res.status(404).json({ message: "Kos tidak ditemukan" });
-
-    // Logika Sederhana: Jika admin upload foto baru, HAPUS SEMUA foto lama fisik
-    // Lalu gantikan datanya dengan array foto yang baru.
     if (req.body.foto && Array.isArray(req.body.foto) && req.body.foto.length > 0) {
        // Cek apakah array foto baru beda dengan yang lama
        const isDifferent = JSON.stringify(req.body.foto) !== JSON.stringify(kosLama.foto);
@@ -265,15 +253,13 @@ app.post('/api/upload', upload.array('images', 10), (req, res) => {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ message: "Tidak ada file yang diupload" });
     }
-
-    // PERBAIKAN DI SINI: Gunakan 'secure_url'
     const imageUrls = req.files.map(file => file.secure_url || file.url);
 
     console.log("✅ Sukses! URL Gambar:", imageUrls);
 
     res.json({
       message: 'Upload berhasil!',
-      urls: imageUrls // Kirim URL yang benar ke frontend
+      urls: imageUrls
     });
   } catch (error) {
     console.error("❌ Error Upload:", error);
@@ -307,7 +293,6 @@ app.get('/api/stats', async (req, res) => {
 app.get('/api/users', async (req, res) => {
   try {
     // .select('-password') artinya: Ambil semua data KECUALI password
-    // Kita gak boleh kirim password orang lain ke frontend (bahaya!)
     const users = await User.find().select('-password').sort({ createdAt: -1 });
     res.json(users);
   } catch (error) {
